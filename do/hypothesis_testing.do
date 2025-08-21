@@ -14,9 +14,11 @@ clear all
 qui cap restore
 
 * DIRECTORY SETUP - file paths for log and output files 
+/*
 cd ""
 global log ""
 global output ""
+*/
 
 qui cap log close hypothesis_testing
 log using "${log}/hypothesis_testing.log", text replace name(hypothesis_testing)

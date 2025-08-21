@@ -14,9 +14,11 @@ clear all
 qui cap restore
 
 * DIRECTORY SETUP - file paths for log and output files 
+/*
 cd ""
 global log ""
 global output ""
+*/
 
 qui cap log close lln_clt_demo
 log using "${log}/lln_clt_demo.log", text replace name(lln_clt_demo)
