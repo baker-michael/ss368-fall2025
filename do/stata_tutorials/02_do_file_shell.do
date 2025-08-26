@@ -27,7 +27,7 @@ mkdir dta /// for storing dta files you've cleaned constructed
 * SET UP LOG 
 *-------------------------------------
 
-log using "log/<lastname>_<first_name>_ps<number>_final.log", text
+log using "log/<lastname>_<firstname>_ps<number>_final.log", text
 
 *-------------------------------------
 * IMPORT DATA / EXECUTE ANALYSIS
