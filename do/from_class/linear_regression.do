@@ -1,8 +1,8 @@
 /*
 Author: Mike Baker         						            
-Date: 27 Aug 2025 
+Date: 27 Aug 2025 / update: 29 Aug 2025
 
-Purpose: create visualizations for linear regression and sampling distribution of OLS estimates
+Purpose: create visualizations for linear regression and sampling distribution of OLS estimates; example of manually calculating the OLS coefficients and standard errors
 
 */
 
@@ -173,6 +173,22 @@ gen u_hat = wage - `intercept' - `beta_hat'*educ
 * calc. the sum of squared residuals (SSR)
 egen ssr = total(u_hat^2)
 
+* calc. the std. error of the slope coefficient 
+*** get number of observations 
+qui count 
+local N = `r(N)'
+
+*** est. the population variance using the residuals  
+local pop_variance_est = (1/(`N'-2))*ssr
+
+*** get the standard deviation of indep. var.
+qui sum educ
+local sd_educ = `r(sd)'
+
+local se_beta_hat = sqrt(1/(`N'-1))*sqrt(`pop_variance_est')/`sd_educ'
+local f_se_beta_hat = string(round(`se_beta_hat', .001),"%9.3fc")
+di "Standard Error (Beta Hat): `f_se_beta_hat'"
+
 * calc. the R-squared 
 
 *** calculate the sum of squares total (SST)
@@ -186,13 +202,13 @@ di "R-squared: `f_r2'"
 
 di "Summary"
 di "Slope Coefficient (Beta Hat): `f_beta_hat'"
+di "Standard Error (Beta Hat): `f_se_beta_hat'"
 di "Intercept: `f_intercept'"
 di "R-squared: `f_r2'"
 
 * check against built-in regression function 
 reg wage educ 
 *** everything checks 
-
 
 * labels
 qui mylabels -2(2)30, myscale(@) local(ylabels)
