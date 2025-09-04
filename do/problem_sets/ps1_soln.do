@@ -8,7 +8,7 @@
 *-------------------------------------
 
 * set your directory 
-cd "C:\Users\michael.baker\Documents\ss368\ss368-pages\problem_sets\ps1"
+cd "<insert your directory here>"
 
 /* create folders for do, log, output, raw_dta, dta - you only do this the first time you start a project
 mkdir do 
