@@ -45,7 +45,7 @@ describe
 		estat sd 
 		local sd_female = r(sd)[1,1]
 		
-		* Alternatively, you could use the collapse command. summarize and tabstat will not accept probability weights 
+		* Alternatively, you could use the collapse command. summarize and tabstat will not accept probability weights. 
 		
 	- Example 2: Estimate a regression with survey weights 
 	
@@ -68,7 +68,7 @@ describe
 *-------------------------------------
 * SET MACROS 
 *-------------------------------------
-* these are the specific variables that are used to produce Table 1 and Table 2
+* these are the specific variables that are used to produce Table 1 and Table 2 in the problem set assignment. 
 
 * SAMPLE CHARACTERISTICS 
 
@@ -112,17 +112,48 @@ local lottery_draw llldraw_lot_2 llldraw_lot_3 llldraw_lot_4 llldraw_lot_5 llldr
 *** for survey sample 
 local svy_controls ddddraw_sur_2 ddddraw_sur_3 ddddraw_sur_4 ddddraw_sur_5 ddddraw_sur_6 ddddraw_sur_7 dddnumhh_li_2 dddnumhh_li_3 ddddraXnum_2_2 ddddraXnum_2_3 ddddraXnum_3_2 ddddraXnum_3_3 ddddraXnum_4_2 ddddraXnum_5_2 ddddraXnum_6_2 ddddraXnum_7_2
 
-*-------------------------------------
-* SUMMARY STATISTICS - TABLE 1
-*-------------------------------------
-
-
 
 *-------------------------------------
-* REGRESSION TABLE - TABLE 2
+* QUESTION 1
 *-------------------------------------
+* Q: What is the problem with an observational study in this context? Why was an experiment needed? Describe the key challenges that confront researchers trying to estimate the effect of health insurance on health care utilization or health outcomes. [one paragraph]
+
+<INSERT YOUR ANSWER HERE>
 
 
+*-------------------------------------
+* TABLE 1 - SUMMARY STATISTICS
+*-------------------------------------
+* Q: Re-produce the results presented in Table 1: For each outcome and sample (full sample and survey sample), calculate the control mean, the treatment mean, and the regression-adjusted difference. The adjusted difference is calculated by regression the variable on the treatment indicator. You will need to include the regression controls above under "REGRESSION CONTROLS". Remember to include the probability weights for the survey sample and cluster standard errors at the household level. 
+
+<INSERT YOUR CODE HERE>
+
+
+
+* Q: Summarize the results presented in Table 1 and identify the key takeaways. [one paragraph] 
+
+<INSERT YOUR ANSWER HERE>
+
+* Q: Explain whether results in Table 1 support using the control group as a comparison for the treatment group. [one paragraph]
+
+<INSERT YOUR ANSWER HERE>
+
+*-------------------------------------
+* TABLE 2 - REGRESSION TABLE
+*-------------------------------------
+* Q: Reproduce the results presented in Table 2: For each outcome and sample (full sample and survey sample), calculate the control mean and estimate the treatment-control difference including the regression controls above under "REGRESSION CONTROLS". Remember to include the probability weights for the survey sample and cluster standard errors at the household level. 
+
+<INSERT YOUR CODE HERE>
+
+
+
+* Q: Summarize the results presented in Table 2 and identify the key takeaways. What effect did winning the insurance lottery have on insurance coverage, health care utilization, and health? [two paragraphs] 
+
+<INSERT YOUR ANSWER HERE>
+
+* Q: Given the research design and the evidence presented in Table 1, do the results presented in Table 2 have a causal interpretation? Explain. [one paragraph]
+
+<INSERT YOUR ANSWER HERE>
 
 log close 
 clear all 
