@@ -92,6 +92,10 @@ local pop_beta = _b[ln_earnings]
 tempfile raw_data 
 save `raw_data'
 
+*--------------------------------------
+* SAMPLING VARIANCE VISUALS
+*--------------------------------------
+
 local num_samples = 10000
 
 foreach sample_size in 1000 5000 {

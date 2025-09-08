@@ -1,0 +1,5234 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  t_distribution
+       log:  C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/t_distribution.log
+  log type:  text
+ opened on:   8 Sep 2025, 14:51:09
+
+. 
+. *---------------------------------------------
+. * PLOT T DIST CDF AND PDF 
+. *---------------------------------------------
+. /* t-distribution commands
+>         t is the cdf
+>         ttail is the reverse cdf: 1 - cdf 
+>         tden is the pdf
+> */
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. * generate t-distribution cdf and pdf for various degrees of freedom
+. foreach i in 10 20 50 100 200 {
+  2.         gen t`i' = tden(`i', x)
+  3.         gen tcdf`i' = t(`i', x)
+  4. }
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * PLOT CDF
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf10 x, lcolor(gs13) ||
+> line tcdf20 x, lcolor(gs8) ||
+> line tcdf50 x, lcolor(gs5) ||
+> line tcdf200 x, lcolor(black) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(label(1 "t, df=10") label(2 "t, df=20") label(3 "t, df=50") label(4 "t, df=200") symxsize(*0.5) symysize(*0.5) row(1) position(6)) 
+> graphregion(color(white));
+
+. graph export "output/t_cdf.svg", width(1600) fontface("Times New Roman") replace;
+(file output/t_cdf.svg not found)
+file output/t_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. * PLOT PDF
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.45
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line t10 x, lcolor(gs13) ||
+> line t20 x, lcolor(gs8) ||
+> line t50 x, lcolor(gs5) ||
+> line t200 x, lcolor(black) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("Density")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(label(1 "t, df=10") label(2 "t, df=20") label(3 "t, df=50") label(4 "t, df=200") symxsize(*0.5) symysize(*0.5) row(1) position(6)) 
+> graphregion(color(white));
+
+. graph export "output/t_pdf.svg", width(1600) fontface("Times New Roman") replace;
+(file output/t_pdf.svg not found)
+file output/t_pdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. *---------------------------------------------
+. * PLOT T DIST AGAINST STANDARD NORMAL
+. *---------------------------------------------
+. 
+. * normalden is the standard normal
+. gen n = normalden(x)
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line t10 x, lcolor(gs13) ||
+> line t20 x, lcolor(gs8) ||
+> line t50 x, lcolor(gs5) ||
+> line t200 x, lcolor(black) ||
+> line n x, lcolor(red) ||, 
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("Density")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(label(1 "t, df=10") label(2 "t, df=20") label(3 "t, df=50") label(4 "t, df=200") label(5 "z") symxsize(*0.5) symysize(*0.5) row(1) position(6)) 
+> graphregion(color(white));
+
+. graph export "output/t_pdf_w_normal.svg", width(1600) fontface("Times New Roman") replace;
+(file output/t_pdf_w_normal.svg not found)
+file output/t_pdf_w_normal.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000b.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+(file output/simple_ttest_cdf.svg not found)
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= `t'
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tdist x if inrange(x,-5,5) ||
+> pci 0 `t' `tdens_t' `t', lcolor(red) lpattern(dash) ||
+> scatteri 0 `t', mcolor(red) ||
+> rarea tdist 0 x if right_tail, color(red%30) lcolor(none) ||
+> pci 0 -`t' `tdens_t' -`t', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`t', mcolor(red) ||
+> rarea tdist 0 x if left_tail, color(red%30) lcolor(none) ||, 
+> xtitle("T") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> caption("t-statistic: `f_t'" "p-value: `f_p'");
+0 invalid name
+r(198);
+
+end of do-file
+
+r(198);
+
+. help rarea
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000c.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= `t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. 
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tdist x if inrange(x,-5,5) ||
+> pci 0 `t' `tdens_t' `t', lcolor(red) lpattern(dash) ||
+> scatteri 0 `t', mcolor(red) ||
+> rarea tdist base x if right_tail, color(red%30) lcolor(none) ||
+> pci 0 -`t' `tdens_t' -`t', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`t', mcolor(red) ||
+> rarea tdist base x if left_tail, color(red%30) lcolor(none) ||, 
+> xtitle("T") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> caption("t-statistic: `f_t'" "p-value: `f_p'");
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000d.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> // shading 
+> rarea tdist base x if right_tail, color(red%30) lcolor(none) ||
+> rarea tdist base x if left_tail, color(red%30) lcolor(none) ||
+> // pdf
+> line tdist x ||
+> // lines at t and -t 
+> pci 0 `t' `tdens_t' `t', lcolor(red) lpattern(dash) ||
+> scatteri 0 `t', mcolor(red) ||
+> pci 0 -`t' `tdens_t' -`t', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`t', mcolor(red) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> caption("t-statistic: `f_t'" "p-value: `f_p'");
+/ / is not a twoway plot type
+r(198);
+
+end of do-file
+
+r(198);
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000e.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, color(red%30) lcolor(none) ||
+> rarea tdist base x if left_tail, color(red%30) lcolor(none) ||
+> line tdist x ||
+> pci 0 `t' `tdens_t' `t', lcolor(red) lpattern(dash) ||
+> scatteri 0 `t', mcolor(red) ||
+> pci 0 -`t' `tdens_t' -`t', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`t', mcolor(red) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> caption("t-statistic: `f_t'" "p-value: `f_p'");
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000f.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, color(red%30) lcolor(none) ||
+> rarea tdist base x if left_tail, color(red%30) lcolor(none) ||
+> line tdist x ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs', mcolor(red) ||
+> pci 0 -`tabs' `tdens_t' -`tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`tabs', mcolor(red) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> caption("t-statistic: `f_t'" "p-value: `f_p'");
+
+. 
+end of do-file
+
+.  do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000g.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, color(red%30) lcolor(none) ||
+> rarea tdist base x if left_tail, color(red%30) lcolor(none) ||
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs', mcolor(red) mlabel("t=-0.63") ||
+> pci 0 -`tabs' `tdens_t' -`tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`tabs', mcolor(red) mlabel("t=-0.63") ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> note("t-statistic: `f_t' // p-value: `f_p'");
+= invalid name
+r(198);
+
+end of do-file
+
+r(198);
+
+. help scatteri
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000h.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, color(red%30) lcolor(none) ||
+> rarea tdist base x if left_tail, color(red%30) lcolor(none) ||
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (2) "t=0.63", mcolor(red) ||
+> pci 0 -`tabs' `tdens_t' -`tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`tabs' (2) "t=-0.63", mcolor(red) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> note("t-statistic: `f_t' // p-value: `f_p'");
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000i.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, sort color(red%30) ||
+> rarea tdist base x if left_tail, sort color(red%30) ||
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (2) "t=0.63", mcolor(red) ||
+> pci 0 -`tabs' `tdens_t' -`tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`tabs' (2) "t=-0.63", mcolor(red) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> note("t-statistic: `f_t' // p-value: `f_p'");
+
+. 
+end of do-file
+
+.  do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000j.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, sort color(red%30) lcolor(none) ||
+> rarea tdist base x if left_tail, sort color(red%30) lcolor(none) ||
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (2) "t=0.63", mcolor(red) ||
+> pci 0 -`tabs' `tdens_t' -`tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`tabs' (2) "t=-0.63", mcolor(red) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> note("t-statistic: `f_t' // p-value: `f_p'");
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000k.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, sort fcolor(red%30) lcolor(none) ||
+> rarea tdist base x if left_tail, sort fcolor(red%30) lcolor(none) ||
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (2) "t=0.63", mcolor(red) ||
+> pci 0 -`tabs' `tdens_t' -`tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`tabs' (2) "t=-0.63", mcolor(red) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> note("t-statistic: `f_t' // p-value: `f_p'");
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000l.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, sort color(red%30) lcolor(background) ||
+> rarea tdist base x if left_tail, sort color(red%30) lcolor(background) ||
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (2) "t=0.63", mcolor(red) ||
+> pci 0 -`tabs' `tdens_t' -`tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`tabs' (2) "t=-0.63", mcolor(red) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> note("t-statistic: `f_t' // p-value: `f_p'");
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000m.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, sort color(red%30) lcolor(background) ||
+> rarea tdist base x if left_tail, sort color(red%30) lcolor(background) ||
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (10) "|t|", mcolor(red) mlabcolor(black) ||
+> pci 0 -`tabs' `tdens_t' -`tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`tabs' (2) "-|t|", mcolor(red) mlabcolor(black) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> note("t-statistic: `f_t' // p-value: `f_p'");
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000n.tmp"
+
+. clear all
+
+. qui cap restore
+
+. 
+. cd "C:/Users/michael.baker/Documents/ss368/ss368-fall2025"
+C:\Users\michael.baker\Documents\ss368\ss368-fall2025
+
+. 
+. qui cap log close ttest
+
+. log using "log/ttest.log", text replace name(ttest)
+(file C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/ttest.log not found)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  ttest
+       log:  C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/ttest.log
+  log type:  text
+ opened on:   8 Sep 2025, 15:18:25
+
+. 
+. *--------------------------------------
+. * IMPORT DATA AND ESTIMATE OLS COEFF AND SE
+. *--------------------------------------
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, sort color(red%30) lcolor(background) ||
+> rarea tdist base x if left_tail, sort color(red%30) lcolor(background) ||
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (10) "|t|", mcolor(red) mlabcolor(black) ||
+> pci 0 -`tabs' `tdens_t' -`tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`tabs' (2) "-|t|", mcolor(red) mlabcolor(black) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> note("t-statistic: `f_t' // p-value: `f_p'");
+
+. graph export "output/simple_ttest_pdf.svg", width(1600) fontface("Times New Roman") replace;
+(file output/simple_ttest_pdf.svg not found)
+file output/simple_ttest_pdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. log close 
+no log file open
+r(606);
+
+end of do-file
+
+r(606);
+
+. log close ttest
+      name:  ttest
+       log:  C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/ttest.log
+  log type:  text
+ closed on:   8 Sep 2025, 15:18:54
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000o.tmp"
+
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, sort color(red%30) lcolor(background) ||
+> rarea tdist base x if left_tail, sort color(red%30) lcolor(background) ||
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (10) "|t|", mcolor(red) mlabcolor(black) ||
+> pci 0 -`tabs' `tdens_t' -`tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`tabs' (2) "-|t|", mcolor(red) mlabcolor(black) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> note("t-statistic: `f_t' // p-value: `f_p'");
+
+. graph export "output/simple_ttest_pdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_pdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. log close ttest
+log ttest not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000p.tmp"
+
+. clear all
+
+. qui cap restore
+
+. 
+. cd "C:/Users/michael.baker/Documents/ss368/ss368-fall2025"
+C:\Users\michael.baker\Documents\ss368\ss368-fall2025
+
+. 
+. qui cap log close ttest
+
+. log using "log/ttest.log", text replace name(ttest)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  ttest
+       log:  C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/ttest.log
+  log type:  text
+ opened on:   8 Sep 2025, 15:19:27
+
+. 
+. *--------------------------------------
+. * IMPORT DATA AND ESTIMATE OLS COEFF AND SE
+. *--------------------------------------
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, sort color(red%30) lcolor(background) ||
+> rarea tdist base x if left_tail, sort color(red%30) lcolor(background) ||
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (10) "|t|", mcolor(red) mlabcolor(black) ||
+> pci 0 -`tabs' `tdens_t' -`tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`tabs' (2) "-|t|", mcolor(red) mlabcolor(black) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> note("t-statistic: `f_t' // p-value: `f_p'");
+
+. graph export "output/simple_ttest_pdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_pdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. log close ttest
+      name:  ttest
+       log:  C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/ttest.log
+  log type:  text
+ closed on:   8 Sep 2025, 15:19:30
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+. clear all 
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000q.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. * without shading 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (10) "|t|", mcolor(red) mlabcolor(black) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off);
+
+. graph export "output/simple_ttest_pdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_pdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000r.tmp"
+
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/BWGHT.DTA", clear
+
+. 
+end of do-file
+
+. mdesc cigs
+
+    Variable    |     Missing          Total     Percent Missing
+----------------+-----------------------------------------------
+           cigs |           0          1,388           0.00
+----------------+-----------------------------------------------
+
+. mdesc lbwght
+
+    Variable    |     Missing          Total     Percent Missing
+----------------+-----------------------------------------------
+         lbwght |           0          1,388           0.00
+----------------+-----------------------------------------------
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000s.tmp"
+
+. gen smoke = cigs>0 & !missing(cigs)
+
+. 
+. reg lbwght smoke 
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =     29.84
+       Model |  1.06254919         1  1.06254919   Prob > F        =    0.0000
+    Residual |  49.3577844     1,386  .035611677   R-squared       =    0.0211
+-------------+----------------------------------   Adj R-squared   =    0.0204
+       Total |  50.4203336     1,387  .036352079   Root MSE        =    .18871
+
+------------------------------------------------------------------------------
+      lbwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       smoke |  -.0769126   .0140805    -5.46   0.000    -.1045341   -.0492912
+       _cons |   4.771779   .0055029   867.14   0.000     4.760984    4.782573
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. reg lbwght cigs
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =     27.98
+       Model |  .997781136         1  .997781136   Prob > F        =    0.0000
+    Residual |  49.4225525     1,386  .035658407   R-squared       =    0.0198
+-------------+----------------------------------   Adj R-squared   =    0.0191
+       Total |  50.4203336     1,387  .036352079   Root MSE        =    .18883
+
+------------------------------------------------------------------------------
+      lbwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        cigs |  -.0044907   .0008489    -5.29   0.000     -.006156   -.0028253
+       _cons |   4.769404   .0053694   888.26   0.000     4.758871    4.779937
+------------------------------------------------------------------------------
+
+. sum cigs,d
+
+                cigs smked per day while preg
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs               1,388
+25%            0              0       Sum of wgt.       1,388
+
+50%            0                      Mean           2.087176
+                        Largest       Std. dev.      5.972688
+75%            0             40
+90%           10             40       Variance         35.673
+95%           20             46       Skewness       3.560448
+99%           20             50       Kurtosis       17.93397
+
+. tab smoke,m
+
+      smoke |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      1,176       84.73       84.73
+          1 |        212       15.27      100.00
+------------+-----------------------------------
+      Total |      1,388      100.00
+
+. reg lbwght faminc
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =     15.39
+       Model |  .553637718         1  .553637718   Prob > F        =    0.0001
+    Residual |  49.8666959     1,386  .035978857   R-squared       =    0.0110
+-------------+----------------------------------   Adj R-squared   =    0.0103
+       Total |  50.4203336     1,387  .036352079   Root MSE        =    .18968
+
+------------------------------------------------------------------------------
+      lbwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      faminc |   .0010662   .0002718     3.92   0.000      .000533    .0015993
+       _cons |   4.729084   .0093893   503.66   0.000     4.710665    4.747503
+------------------------------------------------------------------------------
+
+. reg lbwght fatheduc
+
+      Source |       SS           df       MS      Number of obs   =     1,192
+-------------+----------------------------------   F(1, 1190)      =      6.67
+       Model |  .234343986         1  .234343986   Prob > F        =    0.0100
+    Residual |  41.8396913     1,190  .035159404   R-squared       =    0.0056
+-------------+----------------------------------   Adj R-squared   =    0.0047
+       Total |  42.0740353     1,191  .035326646   Root MSE        =    .18751
+
+------------------------------------------------------------------------------
+      lbwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    fatheduc |   .0051083   .0019786     2.58   0.010     .0012262    .0089903
+       _cons |   4.700098   .0266501   176.36   0.000     4.647812    4.752384
+------------------------------------------------------------------------------
+
+. reg bwght fatheduc
+
+      Source |       SS           df       MS      Number of obs   =     1,192
+-------------+----------------------------------   F(1, 1190)      =      8.46
+       Model |  3409.77577         1  3409.77577   Prob > F        =    0.0037
+    Residual |   479493.78     1,190   402.93595   R-squared       =    0.0071
+-------------+----------------------------------   Adj R-squared   =    0.0062
+       Total |  482903.556     1,191  405.460585   Root MSE        =    20.073
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    fatheduc |   .6161819   .2118186     2.91   0.004     .2006024    1.031761
+       _cons |   111.3942   2.852962    39.05   0.000     105.7968    116.9916
+------------------------------------------------------------------------------
+
+. sum bwght,d
+
+                    birth weight, ounces
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%           61             23
+ 5%           86             30
+10%           93             35       Obs               1,388
+25%          107             38       Sum of wgt.       1,388
+
+50%          120                      Mean           118.6996
+                        Largest       Std. dev.      20.35396
+75%          132            172
+90%          143            176       Variance       414.2839
+95%          149            192       Skewness      -.1458657
+99%          161            271       Kurtosis       6.147639
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000t.tmp"
+
+. reg bwght fatheduc 
+
+      Source |       SS           df       MS      Number of obs   =     1,192
+-------------+----------------------------------   F(1, 1190)      =      8.46
+       Model |  3409.77577         1  3409.77577   Prob > F        =    0.0037
+    Residual |   479493.78     1,190   402.93595   R-squared       =    0.0071
+-------------+----------------------------------   Adj R-squared   =    0.0062
+       Total |  482903.556     1,191  405.460585   Root MSE        =    20.073
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    fatheduc |   .6161819   .2118186     2.91   0.004     .2006024    1.031761
+       _cons |   111.3942   2.852962    39.05   0.000     105.7968    116.9916
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. sum fatheduc
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+    fatheduc |      1,192    13.18624    2.745985          1         18
+
+. reg bwght motheduc
+
+      Source |       SS           df       MS      Number of obs   =     1,387
+-------------+----------------------------------   F(1, 1385)      =      6.65
+       Model |  2745.15468         1  2745.15468   Prob > F        =    0.0100
+    Residual |  571729.586     1,385  412.801145   R-squared       =    0.0048
+-------------+----------------------------------   Adj R-squared   =    0.0041
+       Total |  574474.741     1,386   414.48394   Root MSE        =    20.318
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    motheduc |   .5921371   .2296198     2.58   0.010     .1416969    1.042577
+       _cons |   111.0482   3.020007    36.77   0.000     105.1239    116.9725
+------------------------------------------------------------------------------
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000u.tmp"
+
+. di t(2.58, 1385)
+.99999999
+
+. 
+end of do-file
+
+. reg bwght cigprice
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =      3.36
+       Model |  1390.24401         1  1390.24401   Prob > F        =    0.0670
+    Residual |  573221.476     1,386  413.579708   R-squared       =    0.0024
+-------------+----------------------------------   Adj R-squared   =    0.0017
+       Total |   574611.72     1,387  414.283864   Root MSE        =    20.337
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    cigprice |   .0977276    .053303     1.83   0.067    -.0068356    .2022908
+       _cons |   105.9404   6.980556    15.18   0.000     92.24675    119.6339
+------------------------------------------------------------------------------
+
+. mdesc bwght
+
+    Variable    |     Missing          Total     Percent Missing
+----------------+-----------------------------------------------
+          bwght |           0          1,388           0.00
+----------------+-----------------------------------------------
+
+. mdesc cigprice
+
+    Variable    |     Missing          Total     Percent Missing
+----------------+-----------------------------------------------
+       cigprice |           0          1,388           0.00
+----------------+-----------------------------------------------
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000v.tmp"
+
+. di t(1.83, 1386)
+.9999992
+
+. 
+end of do-file
+
+. help t
+
+. help reg
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000w.tmp"
+
+. di t(`e(N)', _b[cigprice]/[se[cigprice]])
+se not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_00000x.tmp"
+
+. reg bwght cigprice
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =      3.36
+       Model |  1390.24401         1  1390.24401   Prob > F        =    0.0670
+    Residual |  573221.476     1,386  413.579708   R-squared       =    0.0024
+-------------+----------------------------------   Adj R-squared   =    0.0017
+       Total |   574611.72     1,387  414.283864   Root MSE        =    20.337
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    cigprice |   .0977276    .053303     1.83   0.067    -.0068356    .2022908
+       _cons |   105.9404   6.980556    15.18   0.000     92.24675    119.6339
+------------------------------------------------------------------------------
+
+. 
+. di t(`e(N)', _b[cigprice]/_se[cigprice])
+.96652415
+
+. 
+end of do-file
+
+. di _b[cigprice]/_se[cigprice]
+1.8334366
+
+. di 1-.9665
+.0335
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_000010.tmp"
+
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/BWGHT.DTA", clear
+
+. 
+. reg bwght cigprice
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =      3.36
+       Model |  1390.24401         1  1390.24401   Prob > F        =    0.0670
+    Residual |  573221.476     1,386  413.579708   R-squared       =    0.0024
+-------------+----------------------------------   Adj R-squared   =    0.0017
+       Total |   574611.72     1,387  414.283864   Root MSE        =    20.337
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    cigprice |   .0977276    .053303     1.83   0.067    -.0068356    .2022908
+       _cons |   105.9404   6.980556    15.18   0.000     92.24675    119.6339
+------------------------------------------------------------------------------
+
+. 
+. di t(`e(N)', _b[cigprice]/_se[cigprice])
+.96652415
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_000011.tmp"
+
+. 
+. * relationship between mother's education and birth weight 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/BWGHT.DTA", clear
+
+. 
+. reg bwght cigprice
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =      3.36
+       Model |  1390.24401         1  1390.24401   Prob > F        =    0.0670
+    Residual |  573221.476     1,386  413.579708   R-squared       =    0.0024
+-------------+----------------------------------   Adj R-squared   =    0.0017
+       Total |   574611.72     1,387  414.283864   Root MSE        =    20.337
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    cigprice |   .0977276    .053303     1.83   0.067    -.0068356    .2022908
+       _cons |   105.9404   6.980556    15.18   0.000     92.24675    119.6339
+------------------------------------------------------------------------------
+
+. 
+. * calc. t-stat 
+. di  _b[cigprice]/_se[cigprice]
+1.8334366
+
+. 
+. 
+. * calc. P(T<=t) under the null 
+. di t(`e(N)', _b[cigprice]/_se[cigprice])
+.96652415
+
+. 
+. * calc. p-value 
+. di 2*(1-t(`e(N)', _b[cigprice]/_se[cigprice]))
+.06695171
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_000012.tmp"
+
+. 
+. * relationship between mother's education and birth weight 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/BWGHT.DTA", clear
+
+. 
+. reg bwght cigprice
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =      3.36
+       Model |  1390.24401         1  1390.24401   Prob > F        =    0.0670
+    Residual |  573221.476     1,386  413.579708   R-squared       =    0.0024
+-------------+----------------------------------   Adj R-squared   =    0.0017
+       Total |   574611.72     1,387  414.283864   Root MSE        =    20.337
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    cigprice |   .0977276    .053303     1.83   0.067    -.0068356    .2022908
+       _cons |   105.9404   6.980556    15.18   0.000     92.24675    119.6339
+------------------------------------------------------------------------------
+
+. 
+. * calc. t-stat 
+. di  _b[cigprice]/_se[cigprice]
+1.8334366
+
+. 
+. * calc. P(T<=t) under the null 
+. di t(`e(N)', _b[cigprice]/_se[cigprice])
+.96652415
+
+. 
+. * calc. p-value 
+. di 2*(1-t(`e(N)', _b[cigprice]/_se[cigprice]))
+.06695171
+
+. 
+. * calc. 95% ci 
+. *** select significance level 
+. local sig_lvl = 0.05
+
+. 
+. *** critical value lookup for two-sided test
+. ***** this is finding the (100-sig_lvl)/2 percentile of the t distribution. E.g., if sig_lvl is .05, we want to find the 97.5 percentile of the t-distribution 
+. di invttail(`df',`sig_lvl'/2)
+invalid syntax
+r(198);
+
+end of do-file
+
+r(198);
+
+. reg bwght cigprice
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =      3.36
+       Model |  1390.24401         1  1390.24401   Prob > F        =    0.0670
+    Residual |  573221.476     1,386  413.579708   R-squared       =    0.0024
+-------------+----------------------------------   Adj R-squared   =    0.0017
+       Total |   574611.72     1,387  414.283864   Root MSE        =    20.337
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    cigprice |   .0977276    .053303     1.83   0.067    -.0068356    .2022908
+       _cons |   105.9404   6.980556    15.18   0.000     92.24675    119.6339
+------------------------------------------------------------------------------
+
+. di "`e(df)'"
+
+
+. help reg
+
+. di "`e(df_r)'
+1386
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_000013.tmp"
+
+. 
+. * relationship between mother's education and birth weight 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/BWGHT.DTA", clear
+
+. 
+. reg bwght cigprice
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =      3.36
+       Model |  1390.24401         1  1390.24401   Prob > F        =    0.0670
+    Residual |  573221.476     1,386  413.579708   R-squared       =    0.0024
+-------------+----------------------------------   Adj R-squared   =    0.0017
+       Total |   574611.72     1,387  414.283864   Root MSE        =    20.337
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    cigprice |   .0977276    .053303     1.83   0.067    -.0068356    .2022908
+       _cons |   105.9404   6.980556    15.18   0.000     92.24675    119.6339
+------------------------------------------------------------------------------
+
+. 
+. * calc. t-stat 
+. di  _b[cigprice]/_se[cigprice]
+1.8334366
+
+. 
+. * calc. P(T<=t) under the null 
+. di t(`e(N)', _b[cigprice]/_se[cigprice])
+.96652415
+
+. 
+. * calc. p-value 
+. di 2*(1-t(`e(N)', _b[cigprice]/_se[cigprice]))
+.06695171
+
+. 
+. * calc. 95% ci 
+. *** select significance level 
+. local sig_lvl = 0.05
+
+. 
+. *** critical value lookup for two-sided test
+. ***** this is finding the (100-sig_lvl)/2 percentile of the t distribution. E.g., if sig_lvl is .05, we want to find the 97.5 percentile of the t-distribution 
+. di invttail(`e(df_r)',`sig_lvl'/2)
+1.9616771
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+invalid syntax
+r(198);
+
+end of do-file
+
+r(198);
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_000014.tmp"
+
+. 
+. * relationship between mother's education and birth weight 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/BWGHT.DTA", clear
+
+. 
+. reg bwght cigprice
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =      3.36
+       Model |  1390.24401         1  1390.24401   Prob > F        =    0.0670
+    Residual |  573221.476     1,386  413.579708   R-squared       =    0.0024
+-------------+----------------------------------   Adj R-squared   =    0.0017
+       Total |   574611.72     1,387  414.283864   Root MSE        =    20.337
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    cigprice |   .0977276    .053303     1.83   0.067    -.0068356    .2022908
+       _cons |   105.9404   6.980556    15.18   0.000     92.24675    119.6339
+------------------------------------------------------------------------------
+
+. 
+. * calc. t-stat 
+. di  _b[cigprice]/_se[cigprice]
+1.8334366
+
+. 
+. * calc. P(T<=t) under the null 
+. di t(`e(N)', _b[cigprice]/_se[cigprice])
+.96652415
+
+. 
+. * calc. p-value 
+. di 2*(1-t(`e(N)', _b[cigprice]/_se[cigprice]))
+.06695171
+
+. 
+. * calc. 95% ci 
+. *** select significance level 
+. local sig_lvl = 0.05
+
+. 
+. *** critical value lookup for two-sided test
+. ***** this is finding the (100-sig_lvl)/2 percentile of the t distribution. E.g., if sig_lvl is .05, we want to find the 97.5 percentile of the t-distribution 
+. di invttail(`e(df_r)',`sig_lvl'/2)
+1.9616771
+
+. 
+. local c_neg = -invttail(`e(df_r)',`sig_lvl'/2)
+
+. loca c_pos = invttail(`e(df_r)',`sig_lvl'/2)
+
+. 
+. * calculate the 95% confidence interval 
+. local upper_ci = _b[cigprice] + `c_pos'*_se[cigprice]
+
+. di `upper_ci'
+.20229077
+
+. 
+. local lower_ci = _b[cigprice] + `c_neg'*_se[cigprice]
+
+. di `lower_ci'
+-.00683559
+
+. 
+. di "Interval Estimate: [`lower_ci', `upper_ci']"
+Interval Estimate: [-.0068355927945603, .2022907653857007]
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_000015.tmp"
+
+. 
+. * relationship between mother's education and birth weight 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/BWGHT.DTA", clear
+
+. 
+. reg bwght cigprice
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =      3.36
+       Model |  1390.24401         1  1390.24401   Prob > F        =    0.0670
+    Residual |  573221.476     1,386  413.579708   R-squared       =    0.0024
+-------------+----------------------------------   Adj R-squared   =    0.0017
+       Total |   574611.72     1,387  414.283864   Root MSE        =    20.337
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    cigprice |   .0977276    .053303     1.83   0.067    -.0068356    .2022908
+       _cons |   105.9404   6.980556    15.18   0.000     92.24675    119.6339
+------------------------------------------------------------------------------
+
+. 
+. * calc. t-stat 
+. di  _b[cigprice]/_se[cigprice]
+1.8334366
+
+. 
+. * calc. P(T<=t) under the null 
+. di t(`e(N)', _b[cigprice]/_se[cigprice])
+.96652415
+
+. 
+. * calc. p-value 
+. di 2*(1-t(`e(N)', _b[cigprice]/_se[cigprice]))
+.06695171
+
+. 
+. * calculate the 95% confidence interval 
+. *** select significance level 
+. local sig_lvl = 0.05
+
+. 
+. *** critical value lookup for two-sided test
+. ***** this is finding the (100-sig_lvl)/2 percentile of the t distribution. E.g., if sig_lvl is .05, we want to find the 97.5 percentile of the t-distribution 
+. di invttail(`e(df_r)',`sig_lvl'/2)
+1.9616771
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_000016.tmp"
+
+. 
+. * relationship between mother's education and birth weight 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/BWGHT.DTA", clear
+
+. 
+. reg bwght cigprice
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =      3.36
+       Model |  1390.24401         1  1390.24401   Prob > F        =    0.0670
+    Residual |  573221.476     1,386  413.579708   R-squared       =    0.0024
+-------------+----------------------------------   Adj R-squared   =    0.0017
+       Total |   574611.72     1,387  414.283864   Root MSE        =    20.337
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    cigprice |   .0977276    .053303     1.83   0.067    -.0068356    .2022908
+       _cons |   105.9404   6.980556    15.18   0.000     92.24675    119.6339
+------------------------------------------------------------------------------
+
+. 
+. * calc. t-stat 
+. di  _b[cigprice]/_se[cigprice]
+1.8334366
+
+. 
+. * calc. P(T<=t) under the null 
+. di t(`e(N)', _b[cigprice]/_se[cigprice])
+.96652415
+
+. 
+. * calc. p-value 
+. di 2*(1-t(`e(N)', _b[cigprice]/_se[cigprice]))
+.06695171
+
+. 
+. * calculate the 95% confidence interval 
+. *** select significance level 
+. local sig_lvl = 0.05
+
+. 
+. *** critical value lookup for two-sided test
+. ***** this is finding the (100-sig_lvl)/2 percentile of the t distribution. E.g., if sig_lvl is .05, we want to find the 97.5 percentile of the t-distribution 
+. 
+. local critical_value = invttail(`e(df_r)',`sig_lvl'/2)
+
+. di "`critical_value'"
+1.961677050193851
+
+. 
+. local upper_ci = _b[cigprice] + `critical_value'*_se[cigprice]
+
+. di "`upper_ci'"
+.2022907653857007
+
+. 
+. local lower_ci = _b[cigprice] - `critical_value'*_se[cigprice]
+
+. di "`lower_ci'"
+-.0068355927945603
+
+. 
+. di "Interval Estimate: [`lower_ci', `upper_ci']"
+Interval Estimate: [-.0068355927945603, .2022907653857007]
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_000017.tmp"
+
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. local sig_lvl = 0.05
+
+. di invttail(`e(df_r)',`sig_lvl'/2)
+1.9625099
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_000018.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE REGRESSION T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. * without shading 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (10) "|t|", mcolor(red) mlabcolor(black) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off);
+
+. graph export "output/simple_ttest_pdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_pdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. * with shading
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, sort color(red%30) lcolor(background) ||
+> rarea tdist base x if left_tail, sort color(red%30) lcolor(background) ||
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (10) "|t|", mcolor(red) mlabcolor(black) ||
+> pci 0 -`tabs' `tdens_t' -`tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`tabs' (2) "-|t|", mcolor(red) mlabcolor(black) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> note("t-statistic: `f_t' // p-value: `f_p'");
+
+. graph export "output/simple_ttest_pdf_shaded.svg", width(1600) fontface("Times New Roman") replace;
+(file output/simple_ttest_pdf_shaded.svg not found)
+file output/simple_ttest_pdf_shaded.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD66a0_000019.tmp"
+
+. 
+. *****************************************************************
+. * PRELIMINARIES
+. *****************************************************************
+. clear all
+
+. qui cap restore
+
+. 
+. cd "C:/Users/michael.baker/Documents/ss368/ss368-fall2025"
+C:\Users\michael.baker\Documents\ss368\ss368-fall2025
+
+. 
+. qui cap log close ttest
+
+. log using "log/ttest.log", text replace name(ttest)
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  ttest
+       log:  C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/ttest.log
+  log type:  text
+ opened on:   8 Sep 2025, 16:43:20
+
+. 
+. *--------------------------------------
+. * IMPORT DATA AND ESTIMATE OLS COEFF AND SE
+. *--------------------------------------
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clear
+
+. 
+. reg lwage exper 
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(1, 933)       =      0.40
+       Model |   .07030588         1   .07030588   Prob > F        =    0.5292
+    Residual |  165.585977       933  .177476932   R-squared       =    0.0004
+-------------+----------------------------------   Adj R-squared   =   -0.0006
+       Total |  165.656283       934  .177362188   Root MSE        =    .42128
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |   .0019833   .0031511     0.63   0.529    -.0042008    .0081673
+       _cons |    6.75607   .0389557   173.43   0.000     6.679619    6.832521
+------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------
+. * SIMPLE REGRESSION T-TEST
+. *--------------------------------------
+. 
+. * calculate t-stat 
+. local t = _b[exper]/_se[exper]
+
+. di "t-statistic: `t'"
+t-statistic: .6293972892111666
+
+. 
+. local tabs = abs(`t')
+
+. 
+. * capture observations 
+. local N = `e(N)'
+
+. 
+. * calc df 
+. local df = `N' - 2 
+
+. 
+. * select significance level 
+. local sig_lvl = 0.05
+
+. 
+. * critical value lookup for two-sided test
+. *** this is finding the 100-sig_lvl/2 percentile of the t distribution
+. di invttail(`df',`sig_lvl'/2)
+1.9625099
+
+. 
+. local c_neg = -invttail(`df',`sig_lvl'/2)
+
+. loca c_pos = invttail(`df',`sig_lvl'/2)
+
+. 
+. * calculate p-value - equivalent methods
+. di 2*(1 - t(`df',abs(`t')))
+.52924307
+
+. local p = 2*(1 - t(`df',abs(`t')))
+
+. di "p-value: `p'"
+p-value: .529243073456815
+
+. 
+. local cdf = t(`df',abs(`t'))
+
+. di "`cdf'"
+.7353784632715925
+
+. 
+. di 2*ttail(`df', abs(`t'))
+.52924307
+
+. 
+. * PLOT CDF
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. gen t = tden(`df',x)
+
+. gen tcdf = t(`df',x)
+
+. local abs_t = abs(`t')
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tcdf x, lcolor(gs13) ||
+> pci 0 `abs_t' `cdf' `abs_t', lcolor(red) lpattern(dash) ||
+> pci `cdf' `xmin' `cdf' `abs_t', lcolor(red) lpattern(dash) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(T {&le} t)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "output/simple_ttest_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. local tdens_t = tden(`df', `t')
+
+. 
+. * PLOT PDF  
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. drop if !inrange(x,-4,4)
+(599 observations deleted)
+
+. 
+. * generate t-pdf
+. generate tdist = tden(`N'-2, x)
+
+. 
+. * shading 
+. gen right_tail = x >= `t'
+
+. gen left_tail = x <= -`t'
+
+. gen base = 0 
+
+. 
+.  * graph setup
+. local xmax = 4
+
+. local xmin = -4
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 0.5
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+. 
+. local f_t = string(round(`t',0.01),"%9.2fc")
+
+. local f_p = string(round(`p',0.01),"%9.2fc")
+
+. 
+. * without shading 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (10) "|t|", mcolor(red) mlabcolor(black) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off);
+
+. graph export "output/simple_ttest_pdf.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_pdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. * with shading
+. #delimit ;
+delimiter now ;
+. twoway 
+> rarea tdist base x if right_tail, sort color(red%30) lcolor(background) ||
+> rarea tdist base x if left_tail, sort color(red%30) lcolor(background) ||
+> line tdist x, lcolor(black) ||
+> pci 0 `tabs' `tdens_t' `tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 `tabs' (10) "|t|", mcolor(red) mlabcolor(black) ||
+> pci 0 -`tabs' `tdens_t' -`tabs', lcolor(red) lpattern(dash) ||
+> scatteri 0 -`tabs' (2) "-|t|", mcolor(red) mlabcolor(black) ||,
+> xtitle("t") xlabels(`xlabels') xmtick(`xmlabels')
+> ytitle("Density") ylabels(`ylabels') ymtick(`ymlabels')
+> legend(off)
+> note("t-statistic: `f_t' // p-value: `f_p'");
+
+. graph export "output/simple_ttest_pdf_shaded.svg", width(1600) fontface("Times New Roman") replace;
+file output/simple_ttest_pdf_shaded.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. *--------------------------------------
+. * PRACTICE PROBLEM
+. *--------------------------------------
+. 
+. * relationship between mother's education and birth weight 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/BWGHT.DTA", clear
+
+. 
+. reg bwght cigprice
+
+      Source |       SS           df       MS      Number of obs   =     1,388
+-------------+----------------------------------   F(1, 1386)      =      3.36
+       Model |  1390.24401         1  1390.24401   Prob > F        =    0.0670
+    Residual |  573221.476     1,386  413.579708   R-squared       =    0.0024
+-------------+----------------------------------   Adj R-squared   =    0.0017
+       Total |   574611.72     1,387  414.283864   Root MSE        =    20.337
+
+------------------------------------------------------------------------------
+       bwght | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    cigprice |   .0977276    .053303     1.83   0.067    -.0068356    .2022908
+       _cons |   105.9404   6.980556    15.18   0.000     92.24675    119.6339
+------------------------------------------------------------------------------
+
+. 
+. * calc. t-stat 
+. di  _b[cigprice]/_se[cigprice]
+1.8334366
+
+. 
+. * calc. P(T<=t) under the null 
+. di t(`e(N)', _b[cigprice]/_se[cigprice])
+.96652415
+
+. 
+. * calc. p-value 
+. di 2*(1-t(`e(N)', _b[cigprice]/_se[cigprice]))
+.06695171
+
+. 
+. * calculate the 95% confidence interval 
+. *** select significance level 
+. local sig_lvl = 0.05
+
+. 
+. *** critical value lookup for two-sided test
+. ***** this is finding the (100-sig_lvl)/2 percentile of the t distribution. E.g., if sig_lvl is .05, we want to find the 97.5 percentile of the t-distribution 
+. 
+. local critical_value = invttail(`e(df_r)',`sig_lvl'/2)
+
+. di "`critical_value'"
+1.961677050193851
+
+. 
+. local upper_ci = _b[cigprice] + `critical_value'*_se[cigprice]
+
+. di "`upper_ci'"
+.2022907653857007
+
+. 
+. local lower_ci = _b[cigprice] - `critical_value'*_se[cigprice]
+
+. di "`lower_ci'"
+-.0068355927945603
+
+. 
+. di "Interval Estimate: [`lower_ci', `upper_ci']"
+Interval Estimate: [-.0068355927945603, .2022907653857007]
+
+. 
+. log close ttest
+      name:  ttest
+       log:  C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/ttest.log
+  log type:  text
+ closed on:   8 Sep 2025, 16:43:32
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+. clear all 
+
+. 
+end of do-file
+
+. exit, clear
