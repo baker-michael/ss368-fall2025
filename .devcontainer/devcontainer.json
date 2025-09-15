@@ -1,27 +1,23 @@
 {
   "name": "SS368 dev",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-
-  // Auto-install extensions + settings in Codespaces (web VS Code included)
   "customizations": {
     "vscode": {
-      "extensions": [
-        "kylebarron.stata-enhanced" // Stata syntax highlighting (web-safe)
-        // Optional extras:
-        // "kylebutts.vscode-stata"
-      ],
+      "extensions": ["kylebarron.stata-enhanced"],
       "settings": {
         "files.associations": {
           "*.do": "stata",
+          "*.DO": "stata",
           "*.ado": "stata",
-          "*.sthlp": "markdown"
+          "*.ADO": "stata",
+          "*.sthlp": "markdown",
+          "*.STHLP": "markdown"
         }
       }
     }
   },
-
-  // Install Git LFS automatically
   "features": {
     "ghcr.io/devcontainers/features/git-lfs:1": {}
-  }
+  },
+  "postCreateCommand": "git lfs install || true"
 }
