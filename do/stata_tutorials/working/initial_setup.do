@@ -22,3 +22,8 @@ pwd
 
 * change to new directory
 cd "<your current directory here>"
+
+*----------------------------------------------
+* INSTRUCTIONS TO SET WORKING DIRECTORY PERMANENTLY
+*----------------------------------------------
+* use this if you want Stata to open to the same working directory every time you open Stata 
