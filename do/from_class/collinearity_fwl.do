@@ -37,6 +37,9 @@ gen male = 0
 replace male = 1 if female==0 
 */
 
+
+* making updates to this file 
+
 reg lwage educ female
 
 * if we try to add both male and female to the regression, Stata will drop one of them due to perfect collinearity
