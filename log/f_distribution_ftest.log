@@ -1,0 +1,229 @@
+-------------------------------------------------------------------------------------------------------------
+      name:  f_distribution_ftest
+       log:  C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/f_distribution_ftest.log
+  log type:  text
+ opened on:  26 Sep 2025, 15:36:09
+
+. 
+. *----------------------------------
+. * F-DISTRIBUTION
+. *----------------------------------
+. /*
+> F() is the cdf 
+> Fden() is the pdf 
+> 
+> */
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. * generate F- density 
+. gen Fcdf = F(5,500,x)
+
+. gen F = Fden(5,500,x)
+
+. 
+. drop if !inrange(x,0,5)
+(749 observations deleted)
+
+. 
+. * CDF
+. 
+.  * graph setup
+. local xmax = 5
+
+. local xmin = 0
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line Fcdf x, lcolor(blue) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(F {&le} f)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "./output/F_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file ./output/F_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. * PDF
+. 
+. * graph setup
+. local ymax = 0.8
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line F x, lcolor(blue) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("Density")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "./output/F_pdf.svg", width(1600) fontface("Times New Roman") replace;
+file ./output/F_pdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. *----------------------------------
+. * F-TEST MULTIPLE LINEAR HYPOTHESES
+. *----------------------------------
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/MLB1.DTA", clear 
+
+. 
+. * unrestricted model 
+. reg lsalary years gamesyr bavg hrunsyr rbisyr 
+
+      Source |       SS           df       MS      Number of obs   =       353
+-------------+----------------------------------   F(5, 347)       =    117.06
+       Model |  308.989208         5  61.7978416   Prob > F        =    0.0000
+    Residual |  183.186327       347  .527914487   R-squared       =    0.6278
+-------------+----------------------------------   Adj R-squared   =    0.6224
+       Total |  492.175535       352  1.39822595   Root MSE        =    .72658
+
+------------------------------------------------------------------------------
+     lsalary | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       years |   .0688626   .0121145     5.68   0.000     .0450355    .0926898
+     gamesyr |   .0125521   .0026468     4.74   0.000     .0073464    .0177578
+        bavg |   .0009786   .0011035     0.89   0.376    -.0011918     .003149
+     hrunsyr |   .0144295    .016057     0.90   0.369    -.0171518    .0460107
+      rbisyr |   .0107657    .007175     1.50   0.134    -.0033462    .0248776
+       _cons |   11.19242   .2888229    38.75   0.000     10.62435    11.76048
+------------------------------------------------------------------------------
+
+. 
+. local ssr_ur = `e(rss)'
+
+. local df_ur = `e(df_r)'
+
+. 
+. * restricted model 
+. reg lsalary years gamesyr
+
+      Source |       SS           df       MS      Number of obs   =       353
+-------------+----------------------------------   F(2, 350)       =    259.32
+       Model |  293.864058         2  146.932029   Prob > F        =    0.0000
+    Residual |  198.311477       350  .566604221   R-squared       =    0.5971
+-------------+----------------------------------   Adj R-squared   =    0.5948
+       Total |  492.175535       352  1.39822595   Root MSE        =    .75273
+
+------------------------------------------------------------------------------
+     lsalary | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       years |    .071318    .012505     5.70   0.000     .0467236    .0959124
+     gamesyr |   .0201745   .0013429    15.02   0.000     .0175334    .0228156
+       _cons |    11.2238    .108312   103.62   0.000     11.01078    11.43683
+------------------------------------------------------------------------------
+
+. local ssr_r = `e(rss)'
+
+. local df_r = `e(df_r)'
+
+. 
+. local q = `df_r'-`df_ur'
+
+. 
+. local f = ((`ssr_r' - `ssr_ur')/3)/(`ssr_ur'/`df_ur')
+
+. local p = (1-F(`q',`df_ur',`f'))
+
+. 
+. di "`f'"
+9.550252713970835
+
+. di "`p'"
+4.47371298540e-06
+
+. 
+. reg lsalary years gamesyr bavg hrunsyr rbisyr 
+
+      Source |       SS           df       MS      Number of obs   =       353
+-------------+----------------------------------   F(5, 347)       =    117.06
+       Model |  308.989208         5  61.7978416   Prob > F        =    0.0000
+    Residual |  183.186327       347  .527914487   R-squared       =    0.6278
+-------------+----------------------------------   Adj R-squared   =    0.6224
+       Total |  492.175535       352  1.39822595   Root MSE        =    .72658
+
+------------------------------------------------------------------------------
+     lsalary | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       years |   .0688626   .0121145     5.68   0.000     .0450355    .0926898
+     gamesyr |   .0125521   .0026468     4.74   0.000     .0073464    .0177578
+        bavg |   .0009786   .0011035     0.89   0.376    -.0011918     .003149
+     hrunsyr |   .0144295    .016057     0.90   0.369    -.0171518    .0460107
+      rbisyr |   .0107657    .007175     1.50   0.134    -.0033462    .0248776
+       _cons |   11.19242   .2888229    38.75   0.000     10.62435    11.76048
+------------------------------------------------------------------------------
+
+. test bavg hrunsyr rbisyr 
+
+ ( 1)  bavg = 0
+ ( 2)  hrunsyr = 0
+ ( 3)  rbisyr = 0
+
+       F(  3,   347) =    9.55
+            Prob > F =    0.0000
+
+. di "`r(p)'"
+4.47371298544e-06
+
+. 
+. log close f_distribution_ftest 
+      name:  f_distribution_ftest
+       log:  C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/f_distribution_ftest.log
+  log type:  text
+ closed on:  26 Sep 2025, 15:36:13
+-------------------------------------------------------------------------------------------------------------

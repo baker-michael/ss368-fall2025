@@ -1,0 +1,1905 @@
+-------------------------------------------------------------------------------------------------------------
+      name:  f_distribution
+       log:  C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/f_distribution.log
+  log type:  text
+ opened on:  26 Sep 2025, 15:31:36
+
+. 
+. *----------------------------------
+. * F-DISTRIBUTION
+. *----------------------------------
+. /*
+> F() is the cdf 
+> Fden() is the pdf 
+> 
+> */
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. * generate F- density 
+. gen Fcdf = F(5,500,x)
+
+. gen F = Fden(5,500,x)
+
+. 
+. drop if !inrange(x,0,5)
+(749 observations deleted)
+
+. 
+. * CDF
+. 
+.  * graph setup
+. local xmax = 5
+
+. local xmin = 0
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line Fcdf x, lcolor(blue) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(F {&le} f)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "./output/F_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file ./output/F_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. * PDF
+. 
+. * graph setup
+. local ymax = 0.8
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line F x, lcolor(blue) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("Density")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "./output/F_pdf.svg", width(1600) fontface("Times New Roman") replace;
+file ./output/F_pdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+end of do-file
+
+. help F
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_000002.tmp"
+
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/MLB1.dta", clear 
+file https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/MLB1.dta not found
+r(601);
+
+end of do-file
+
+r(601);
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_000003.tmp"
+
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/MLB1.DTA", clear 
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_000004.tmp"
+
+. 
+. *****************************************************************
+. * PRELIMINARIES
+. *****************************************************************
+. 
+. clear all
+
+. qui cap restore
+
+. 
+. * DIRECTORY SETUP
+. * cd "<insert your directory here>"
+. 
+. qui cap log close f_distribution_ftest
+
+. log using "./log/f_distribution_ftest.log", text replace name(f_distribution_ftest)
+(file C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/f_distribution_ftest.log not found)
+-------------------------------------------------------------------------------------------------------------
+      name:  f_distribution_ftest
+       log:  C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/f_distribution_ftest.log
+  log type:  text
+ opened on:  26 Sep 2025, 15:36:09
+
+. 
+. *----------------------------------
+. * F-DISTRIBUTION
+. *----------------------------------
+. /*
+> F() is the cdf 
+> Fden() is the pdf 
+> 
+> */
+. 
+. clear
+
+. set obs 1000
+Number of observations (_N) was 0, now 1,000.
+
+. generate x = (_n - 500)/50
+
+. 
+. * generate F- density 
+. gen Fcdf = F(5,500,x)
+
+. gen F = Fden(5,500,x)
+
+. 
+. drop if !inrange(x,0,5)
+(749 observations deleted)
+
+. 
+. * CDF
+. 
+.  * graph setup
+. local xmax = 5
+
+. local xmin = 0
+
+. local xskip = 1
+
+. local xmskip = `xskip'/2
+
+. 
+. qui mylabels `xmin'(`xskip')`xmax', myscale(@) local(xlabels) 
+
+. qui mylabels `xmin'(`xmskip')`xmax', myscale(@) local(xmlabels) 
+
+. 
+. local ymax = 1
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line Fcdf x, lcolor(blue) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("P(F {&le} f)")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "./output/F_cdf.svg", width(1600) fontface("Times New Roman") replace;
+file ./output/F_cdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. * PDF
+. 
+. * graph setup
+. local ymax = 0.8
+
+. local ymin = 0
+
+. local yskip = 0.1
+
+. local ymskip = `yskip'/2
+
+. qui mylabels `ymin'(`yskip')`ymax', myscale(@) local(ylabels)
+
+. qui mylabels `ymin'(`ymskip')`ymax', myscale(@) local(ymlabels) 
+
+.                 
+. #delimit ;
+delimiter now ;
+. twoway 
+> line F x, lcolor(blue) ||,
+> xtitle("")
+> xlabels(`xlabels')
+> xmtick(`xmlabels')
+> ytitle("Density")
+> ylabels(`ylabels',angle(0) glcolor(dimgray) glpattern(dash))
+> ymtick(`ymlabels')
+> legend(off) 
+> graphregion(color(white));
+
+. graph export "./output/F_pdf.svg", width(1600) fontface("Times New Roman") replace;
+file ./output/F_pdf.svg saved as SVG format
+
+. #delimit cr 
+delimiter now cr
+. 
+. *----------------------------------
+. * F-TEST MULTIPLE LINEAR HYPOTHESES
+. *----------------------------------
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/MLB1.DTA", clear 
+
+. 
+. * unrestricted model 
+. reg lsalary years gamesyr bavg hrunsyr rbisyr 
+
+      Source |       SS           df       MS      Number of obs   =       353
+-------------+----------------------------------   F(5, 347)       =    117.06
+       Model |  308.989208         5  61.7978416   Prob > F        =    0.0000
+    Residual |  183.186327       347  .527914487   R-squared       =    0.6278
+-------------+----------------------------------   Adj R-squared   =    0.6224
+       Total |  492.175535       352  1.39822595   Root MSE        =    .72658
+
+------------------------------------------------------------------------------
+     lsalary | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       years |   .0688626   .0121145     5.68   0.000     .0450355    .0926898
+     gamesyr |   .0125521   .0026468     4.74   0.000     .0073464    .0177578
+        bavg |   .0009786   .0011035     0.89   0.376    -.0011918     .003149
+     hrunsyr |   .0144295    .016057     0.90   0.369    -.0171518    .0460107
+      rbisyr |   .0107657    .007175     1.50   0.134    -.0033462    .0248776
+       _cons |   11.19242   .2888229    38.75   0.000     10.62435    11.76048
+------------------------------------------------------------------------------
+
+. 
+. local ssr_ur = `e(rss)'
+
+. local df_ur = `e(df_r)'
+
+. 
+. * restricted model 
+. reg lsalary years gamesyr
+
+      Source |       SS           df       MS      Number of obs   =       353
+-------------+----------------------------------   F(2, 350)       =    259.32
+       Model |  293.864058         2  146.932029   Prob > F        =    0.0000
+    Residual |  198.311477       350  .566604221   R-squared       =    0.5971
+-------------+----------------------------------   Adj R-squared   =    0.5948
+       Total |  492.175535       352  1.39822595   Root MSE        =    .75273
+
+------------------------------------------------------------------------------
+     lsalary | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       years |    .071318    .012505     5.70   0.000     .0467236    .0959124
+     gamesyr |   .0201745   .0013429    15.02   0.000     .0175334    .0228156
+       _cons |    11.2238    .108312   103.62   0.000     11.01078    11.43683
+------------------------------------------------------------------------------
+
+. local ssr_r = `e(rss)'
+
+. local df_r = `e(df_r)'
+
+. 
+. local q = `df_r'-`df_ur'
+
+. 
+. local f = ((`ssr_r' - `ssr_ur')/3)/(`ssr_ur'/`df_ur')
+
+. local p = (1-F(`q',`df_ur',`f'))
+
+. 
+. di "`f'"
+9.550252713970835
+
+. di "`p'"
+4.47371298540e-06
+
+. 
+. reg lsalary years gamesyr bavg hrunsyr rbisyr 
+
+      Source |       SS           df       MS      Number of obs   =       353
+-------------+----------------------------------   F(5, 347)       =    117.06
+       Model |  308.989208         5  61.7978416   Prob > F        =    0.0000
+    Residual |  183.186327       347  .527914487   R-squared       =    0.6278
+-------------+----------------------------------   Adj R-squared   =    0.6224
+       Total |  492.175535       352  1.39822595   Root MSE        =    .72658
+
+------------------------------------------------------------------------------
+     lsalary | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       years |   .0688626   .0121145     5.68   0.000     .0450355    .0926898
+     gamesyr |   .0125521   .0026468     4.74   0.000     .0073464    .0177578
+        bavg |   .0009786   .0011035     0.89   0.376    -.0011918     .003149
+     hrunsyr |   .0144295    .016057     0.90   0.369    -.0171518    .0460107
+      rbisyr |   .0107657    .007175     1.50   0.134    -.0033462    .0248776
+       _cons |   11.19242   .2888229    38.75   0.000     10.62435    11.76048
+------------------------------------------------------------------------------
+
+. test bavg hrunsyr rbisyr 
+
+ ( 1)  bavg = 0
+ ( 2)  hrunsyr = 0
+ ( 3)  rbisyr = 0
+
+       F(  3,   347) =    9.55
+            Prob > F =    0.0000
+
+. di "`r(p)'"
+4.47371298544e-06
+
+. 
+. log close f_distribution_ftest 
+      name:  f_distribution_ftest
+       log:  C:\Users\michael.baker\Documents\ss368\ss368-fall2025\log/f_distribution_ftest.log
+  log type:  text
+ closed on:  26 Sep 2025, 15:36:13
+-------------------------------------------------------------------------------------------------------------
+
+. clear all 
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_000005.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/MLB1.DTA", clear
+>  
+
+. 
+. * unrestricted model 
+. reg lsalary years gamesyr bavg hrunsyr rbisyr 
+
+      Source |       SS           df       MS      Number of obs   =       353
+-------------+----------------------------------   F(5, 347)       =    117.06
+       Model |  308.989208         5  61.7978416   Prob > F        =    0.0000
+    Residual |  183.186327       347  .527914487   R-squared       =    0.6278
+-------------+----------------------------------   Adj R-squared   =    0.6224
+       Total |  492.175535       352  1.39822595   Root MSE        =    .72658
+
+------------------------------------------------------------------------------
+     lsalary | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       years |   .0688626   .0121145     5.68   0.000     .0450355    .0926898
+     gamesyr |   .0125521   .0026468     4.74   0.000     .0073464    .0177578
+        bavg |   .0009786   .0011035     0.89   0.376    -.0011918     .003149
+     hrunsyr |   .0144295    .016057     0.90   0.369    -.0171518    .0460107
+      rbisyr |   .0107657    .007175     1.50   0.134    -.0033462    .0248776
+       _cons |   11.19242   .2888229    38.75   0.000     10.62435    11.76048
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_000006.tmp"
+
+. 
+. * unrestricted model 
+. reg lsalary years gamesyr bavg hrunsyr rbisyr 
+
+      Source |       SS           df       MS      Number of obs   =       353
+-------------+----------------------------------   F(5, 347)       =    117.06
+       Model |  308.989208         5  61.7978416   Prob > F        =    0.0000
+    Residual |  183.186327       347  .527914487   R-squared       =    0.6278
+-------------+----------------------------------   Adj R-squared   =    0.6224
+       Total |  492.175535       352  1.39822595   Root MSE        =    .72658
+
+------------------------------------------------------------------------------
+     lsalary | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       years |   .0688626   .0121145     5.68   0.000     .0450355    .0926898
+     gamesyr |   .0125521   .0026468     4.74   0.000     .0073464    .0177578
+        bavg |   .0009786   .0011035     0.89   0.376    -.0011918     .003149
+     hrunsyr |   .0144295    .016057     0.90   0.369    -.0171518    .0460107
+      rbisyr |   .0107657    .007175     1.50   0.134    -.0033462    .0248776
+       _cons |   11.19242   .2888229    38.75   0.000     10.62435    11.76048
+------------------------------------------------------------------------------
+
+. 
+. local ssr_ur = `e(rss)'
+
+. local df_ur = `e(df_r)'
+
+. 
+. * restricted model 
+. reg lsalary years gamesyr
+
+      Source |       SS           df       MS      Number of obs   =       353
+-------------+----------------------------------   F(2, 350)       =    259.32
+       Model |  293.864058         2  146.932029   Prob > F        =    0.0000
+    Residual |  198.311477       350  .566604221   R-squared       =    0.5971
+-------------+----------------------------------   Adj R-squared   =    0.5948
+       Total |  492.175535       352  1.39822595   Root MSE        =    .75273
+
+------------------------------------------------------------------------------
+     lsalary | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       years |    .071318    .012505     5.70   0.000     .0467236    .0959124
+     gamesyr |   .0201745   .0013429    15.02   0.000     .0175334    .0228156
+       _cons |    11.2238    .108312   103.62   0.000     11.01078    11.43683
+------------------------------------------------------------------------------
+
+. local ssr_r = `e(rss)'
+
+. local df_r = `e(df_r)'
+
+. 
+. local q = `df_r'-`df_ur'
+
+. 
+. local f = ((`ssr_r' - `ssr_ur')/3)/(`ssr_ur'/`df_ur')
+
+. local p = (1-F(`q',`df_ur',`f'))
+
+. 
+. di "`f'"
+9.550252713970835
+
+. di "`p'"
+4.47371298540e-06
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_000007.tmp"
+
+. 
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/MLB1.DTA", clear
+>  
+
+. 
+. * unrestricted model 
+. reg lsalary years gamesyr bavg hrunsyr rbisyr 
+
+      Source |       SS           df       MS      Number of obs   =       353
+-------------+----------------------------------   F(5, 347)       =    117.06
+       Model |  308.989208         5  61.7978416   Prob > F        =    0.0000
+    Residual |  183.186327       347  .527914487   R-squared       =    0.6278
+-------------+----------------------------------   Adj R-squared   =    0.6224
+       Total |  492.175535       352  1.39822595   Root MSE        =    .72658
+
+------------------------------------------------------------------------------
+     lsalary | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       years |   .0688626   .0121145     5.68   0.000     .0450355    .0926898
+     gamesyr |   .0125521   .0026468     4.74   0.000     .0073464    .0177578
+        bavg |   .0009786   .0011035     0.89   0.376    -.0011918     .003149
+     hrunsyr |   .0144295    .016057     0.90   0.369    -.0171518    .0460107
+      rbisyr |   .0107657    .007175     1.50   0.134    -.0033462    .0248776
+       _cons |   11.19242   .2888229    38.75   0.000     10.62435    11.76048
+------------------------------------------------------------------------------
+
+. 
+. local ssr_ur = `e(rss)'
+
+. local df_ur = `e(df_r)'
+
+. 
+. * restricted model 
+. reg lsalary years gamesyr
+
+      Source |       SS           df       MS      Number of obs   =       353
+-------------+----------------------------------   F(2, 350)       =    259.32
+       Model |  293.864058         2  146.932029   Prob > F        =    0.0000
+    Residual |  198.311477       350  .566604221   R-squared       =    0.5971
+-------------+----------------------------------   Adj R-squared   =    0.5948
+       Total |  492.175535       352  1.39822595   Root MSE        =    .75273
+
+------------------------------------------------------------------------------
+     lsalary | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       years |    .071318    .012505     5.70   0.000     .0467236    .0959124
+     gamesyr |   .0201745   .0013429    15.02   0.000     .0175334    .0228156
+       _cons |    11.2238    .108312   103.62   0.000     11.01078    11.43683
+------------------------------------------------------------------------------
+
+. local ssr_r = `e(rss)'
+
+. local df_r = `e(df_r)'
+
+. 
+. local q = `df_r'-`df_ur'
+
+. 
+. local f = ((`ssr_r' - `ssr_ur')/`q')/(`ssr_ur'/`df_ur')
+
+. local p = (1-F(`q',`df_ur',`f'))
+
+. 
+. di "F-statistic: `f'"
+F-statistic: 9.550252713970835
+
+. di "p-value: `p'"
+p-value: 4.47371298540e-06
+
+. 
+. reg lsalary years gamesyr bavg hrunsyr rbisyr 
+
+      Source |       SS           df       MS      Number of obs   =       353
+-------------+----------------------------------   F(5, 347)       =    117.06
+       Model |  308.989208         5  61.7978416   Prob > F        =    0.0000
+    Residual |  183.186327       347  .527914487   R-squared       =    0.6278
+-------------+----------------------------------   Adj R-squared   =    0.6224
+       Total |  492.175535       352  1.39822595   Root MSE        =    .72658
+
+------------------------------------------------------------------------------
+     lsalary | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       years |   .0688626   .0121145     5.68   0.000     .0450355    .0926898
+     gamesyr |   .0125521   .0026468     4.74   0.000     .0073464    .0177578
+        bavg |   .0009786   .0011035     0.89   0.376    -.0011918     .003149
+     hrunsyr |   .0144295    .016057     0.90   0.369    -.0171518    .0460107
+      rbisyr |   .0107657    .007175     1.50   0.134    -.0033462    .0248776
+       _cons |   11.19242   .2888229    38.75   0.000     10.62435    11.76048
+------------------------------------------------------------------------------
+
+. test bavg hrunsyr rbisyr 
+
+ ( 1)  bavg = 0
+ ( 2)  hrunsyr = 0
+ ( 3)  rbisyr = 0
+
+       F(  3,   347) =    9.55
+            Prob > F =    0.0000
+
+. di "p-value: `r(p)'"
+p-value: 4.47371298544e-06
+
+. 
+end of do-file
+
+. help F
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_000008.tmp"
+
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clea
+> r 
+
+. 
+end of do-file
+
+. reg lwage educ exper tenure age married black
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(6, 928)       =     39.04
+       Model |   33.384817         6  5.56413617   Prob > F        =    0.0000
+    Residual |  132.271466       928  .142533908   R-squared       =    0.2015
+-------------+----------------------------------   Adj R-squared   =    0.1964
+       Total |  165.656283       934  .177362188   Root MSE        =    .37754
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0671578   .0066659    10.07   0.000     .0540758    .0802399
+       exper |    .011163   .0038347     2.91   0.004     .0036372    .0186887
+      tenure |   .0111277   .0025618     4.34   0.000     .0061001    .0161552
+         age |   .0071063   .0048328     1.47   0.142    -.0023782    .0165908
+     married |   .1831405   .0403755     4.54   0.000     .1039025    .2623784
+       black |  -.1964922   .0377325    -5.21   0.000     -.270543   -.1224413
+       _cons |   5.291493   .1581588    33.46   0.000     4.981103    5.601884
+------------------------------------------------------------------------------
+
+. reg lwage educ exper tenure age married black sibs brthord meduc feduc
+
+      Source |       SS           df       MS      Number of obs   =       663
+-------------+----------------------------------   F(10, 652)      =     17.86
+       Model |  24.1880684        10  2.41880684   Prob > F        =    0.0000
+    Residual |   88.295094       652  .135421923   R-squared       =    0.2150
+-------------+----------------------------------   Adj R-squared   =    0.2030
+       Total |  112.483162       662  .169914143   Root MSE        =      .368
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0579615   .0083166     6.97   0.000     .0416309    .0742921
+       exper |   .0133595   .0046294     2.89   0.004     .0042691    .0224498
+      tenure |   .0080938   .0030144     2.69   0.007     .0021748    .0140128
+         age |   .0100142   .0057104     1.75   0.080    -.0011987    .0212271
+     married |   .1908066   .0481511     3.96   0.000     .0962566    .2853566
+       black |  -.1263737   .0552376    -2.29   0.022    -.2348387   -.0179087
+        sibs |    .005396   .0081525     0.66   0.508    -.0106123    .0214043
+     brthord |  -.0169547   .0120085    -1.41   0.158    -.0405348    .0066253
+       meduc |    .011112   .0064424     1.72   0.085    -.0015383    .0237622
+       feduc |   .0105945   .0056177     1.89   0.060    -.0004363    .0216254
+       _cons |   5.111291   .1920792    26.61   0.000     4.734122    5.488459
+------------------------------------------------------------------------------
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_000009.tmp"
+
+. 
+. * EXAMPLE 2
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clea
+> r 
+
+. 
+. *** MANUAL CALCULATION
+. 
+. * unrestricted model 
+. reg lwage educ exper tenure age married black sibs brthord meduc feduc
+
+      Source |       SS           df       MS      Number of obs   =       663
+-------------+----------------------------------   F(10, 652)      =     17.86
+       Model |  24.1880684        10  2.41880684   Prob > F        =    0.0000
+    Residual |   88.295094       652  .135421923   R-squared       =    0.2150
+-------------+----------------------------------   Adj R-squared   =    0.2030
+       Total |  112.483162       662  .169914143   Root MSE        =      .368
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0579615   .0083166     6.97   0.000     .0416309    .0742921
+       exper |   .0133595   .0046294     2.89   0.004     .0042691    .0224498
+      tenure |   .0080938   .0030144     2.69   0.007     .0021748    .0140128
+         age |   .0100142   .0057104     1.75   0.080    -.0011987    .0212271
+     married |   .1908066   .0481511     3.96   0.000     .0962566    .2853566
+       black |  -.1263737   .0552376    -2.29   0.022    -.2348387   -.0179087
+        sibs |    .005396   .0081525     0.66   0.508    -.0106123    .0214043
+     brthord |  -.0169547   .0120085    -1.41   0.158    -.0405348    .0066253
+       meduc |    .011112   .0064424     1.72   0.085    -.0015383    .0237622
+       feduc |   .0105945   .0056177     1.89   0.060    -.0004363    .0216254
+       _cons |   5.111291   .1920792    26.61   0.000     4.734122    5.488459
+------------------------------------------------------------------------------
+
+. 
+. local ssr_ur = `e(rss)'
+
+. local df_ur = `e(df_r)'
+
+. 
+. * are the fmaily controls important? 
+. *** restricted model - omit sibs brthord meduc feduc
+. reg lwage educ exper tenure age married black
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(6, 928)       =     39.04
+       Model |   33.384817         6  5.56413617   Prob > F        =    0.0000
+    Residual |  132.271466       928  .142533908   R-squared       =    0.2015
+-------------+----------------------------------   Adj R-squared   =    0.1964
+       Total |  165.656283       934  .177362188   Root MSE        =    .37754
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0671578   .0066659    10.07   0.000     .0540758    .0802399
+       exper |    .011163   .0038347     2.91   0.004     .0036372    .0186887
+      tenure |   .0111277   .0025618     4.34   0.000     .0061001    .0161552
+         age |   .0071063   .0048328     1.47   0.142    -.0023782    .0165908
+     married |   .1831405   .0403755     4.54   0.000     .1039025    .2623784
+       black |  -.1964922   .0377325    -5.21   0.000     -.270543   -.1224413
+       _cons |   5.291493   .1581588    33.46   0.000     4.981103    5.601884
+------------------------------------------------------------------------------
+
+. 
+. local ssr_r = `e(rss)'
+
+. local df_r = `e(df_r)'
+
+. 
+. local q = `df_r'-`df_ur'
+
+. 
+. local f = ((`ssr_r' - `ssr_ur')/`q')/(`ssr_ur'/`df_ur')
+
+. local p = (1-F(`q',`df_ur',`f'))
+
+. 
+. di "F-statistic: `f'"
+F-statistic: 1.176579670545036
+
+. di "p-value: `p'"
+p-value: .0514491078089769
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_00000a.tmp"
+
+. 
+. *** USING STATA BUILT-IN FUNCTION: test 
+. reg lwage educ exper tenure age married black sibs brthord meduc feduc
+
+      Source |       SS           df       MS      Number of obs   =       663
+-------------+----------------------------------   F(10, 652)      =     17.86
+       Model |  24.1880684        10  2.41880684   Prob > F        =    0.0000
+    Residual |   88.295094       652  .135421923   R-squared       =    0.2150
+-------------+----------------------------------   Adj R-squared   =    0.2030
+       Total |  112.483162       662  .169914143   Root MSE        =      .368
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0579615   .0083166     6.97   0.000     .0416309    .0742921
+       exper |   .0133595   .0046294     2.89   0.004     .0042691    .0224498
+      tenure |   .0080938   .0030144     2.69   0.007     .0021748    .0140128
+         age |   .0100142   .0057104     1.75   0.080    -.0011987    .0212271
+     married |   .1908066   .0481511     3.96   0.000     .0962566    .2853566
+       black |  -.1263737   .0552376    -2.29   0.022    -.2348387   -.0179087
+        sibs |    .005396   .0081525     0.66   0.508    -.0106123    .0214043
+     brthord |  -.0169547   .0120085    -1.41   0.158    -.0405348    .0066253
+       meduc |    .011112   .0064424     1.72   0.085    -.0015383    .0237622
+       feduc |   .0105945   .0056177     1.89   0.060    -.0004363    .0216254
+       _cons |   5.111291   .1920792    26.61   0.000     4.734122    5.488459
+------------------------------------------------------------------------------
+
+. test bavg hrunsyr rbisyr 
+bavg not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_00000b.tmp"
+
+. 
+. * EXAMPLE 2
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clea
+> r 
+
+. 
+. *** MANUAL CALCULATION
+. 
+. * unrestricted model 
+. reg lwage educ exper tenure age married black sibs brthord meduc feduc
+
+      Source |       SS           df       MS      Number of obs   =       663
+-------------+----------------------------------   F(10, 652)      =     17.86
+       Model |  24.1880684        10  2.41880684   Prob > F        =    0.0000
+    Residual |   88.295094       652  .135421923   R-squared       =    0.2150
+-------------+----------------------------------   Adj R-squared   =    0.2030
+       Total |  112.483162       662  .169914143   Root MSE        =      .368
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0579615   .0083166     6.97   0.000     .0416309    .0742921
+       exper |   .0133595   .0046294     2.89   0.004     .0042691    .0224498
+      tenure |   .0080938   .0030144     2.69   0.007     .0021748    .0140128
+         age |   .0100142   .0057104     1.75   0.080    -.0011987    .0212271
+     married |   .1908066   .0481511     3.96   0.000     .0962566    .2853566
+       black |  -.1263737   .0552376    -2.29   0.022    -.2348387   -.0179087
+        sibs |    .005396   .0081525     0.66   0.508    -.0106123    .0214043
+     brthord |  -.0169547   .0120085    -1.41   0.158    -.0405348    .0066253
+       meduc |    .011112   .0064424     1.72   0.085    -.0015383    .0237622
+       feduc |   .0105945   .0056177     1.89   0.060    -.0004363    .0216254
+       _cons |   5.111291   .1920792    26.61   0.000     4.734122    5.488459
+------------------------------------------------------------------------------
+
+. 
+. local ssr_ur = `e(rss)'
+
+. local df_ur = `e(df_r)'
+
+. 
+. * are the fmaily controls important? 
+. *** restricted model - omit sibs brthord meduc feduc
+. reg lwage educ exper tenure age married black
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(6, 928)       =     39.04
+       Model |   33.384817         6  5.56413617   Prob > F        =    0.0000
+    Residual |  132.271466       928  .142533908   R-squared       =    0.2015
+-------------+----------------------------------   Adj R-squared   =    0.1964
+       Total |  165.656283       934  .177362188   Root MSE        =    .37754
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0671578   .0066659    10.07   0.000     .0540758    .0802399
+       exper |    .011163   .0038347     2.91   0.004     .0036372    .0186887
+      tenure |   .0111277   .0025618     4.34   0.000     .0061001    .0161552
+         age |   .0071063   .0048328     1.47   0.142    -.0023782    .0165908
+     married |   .1831405   .0403755     4.54   0.000     .1039025    .2623784
+       black |  -.1964922   .0377325    -5.21   0.000     -.270543   -.1224413
+       _cons |   5.291493   .1581588    33.46   0.000     4.981103    5.601884
+------------------------------------------------------------------------------
+
+. 
+. local ssr_r = `e(rss)'
+
+. local df_r = `e(df_r)'
+
+. 
+. local q = `df_r'-`df_ur'
+
+. 
+. local f = ((`ssr_r' - `ssr_ur')/`q')/(`ssr_ur'/`df_ur')
+
+. local p = (1-F(`q',`df_ur',`f'))
+
+. 
+. di "F-statistic: `f'"
+F-statistic: 1.176579670545036
+
+. di "p-value: `p'"
+p-value: .0514491078089769
+
+. 
+. *** USING STATA BUILT-IN FUNCTION: test 
+. reg lwage educ exper tenure age married black sibs brthord meduc feduc
+
+      Source |       SS           df       MS      Number of obs   =       663
+-------------+----------------------------------   F(10, 652)      =     17.86
+       Model |  24.1880684        10  2.41880684   Prob > F        =    0.0000
+    Residual |   88.295094       652  .135421923   R-squared       =    0.2150
+-------------+----------------------------------   Adj R-squared   =    0.2030
+       Total |  112.483162       662  .169914143   Root MSE        =      .368
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0579615   .0083166     6.97   0.000     .0416309    .0742921
+       exper |   .0133595   .0046294     2.89   0.004     .0042691    .0224498
+      tenure |   .0080938   .0030144     2.69   0.007     .0021748    .0140128
+         age |   .0100142   .0057104     1.75   0.080    -.0011987    .0212271
+     married |   .1908066   .0481511     3.96   0.000     .0962566    .2853566
+       black |  -.1263737   .0552376    -2.29   0.022    -.2348387   -.0179087
+        sibs |    .005396   .0081525     0.66   0.508    -.0106123    .0214043
+     brthord |  -.0169547   .0120085    -1.41   0.158    -.0405348    .0066253
+       meduc |    .011112   .0064424     1.72   0.085    -.0015383    .0237622
+       feduc |   .0105945   .0056177     1.89   0.060    -.0004363    .0216254
+       _cons |   5.111291   .1920792    26.61   0.000     4.734122    5.488459
+------------------------------------------------------------------------------
+
+. test sibs brthord meduc feduc
+
+ ( 1)  sibs = 0
+ ( 2)  brthord = 0
+ ( 3)  meduc = 0
+ ( 4)  feduc = 0
+
+       F(  4,   652) =    4.25
+            Prob > F =    0.0021
+
+. di "p-value: `r(p)'"
+p-value: .002099877636241
+
+. 
+end of do-file
+
+. 
+. * unrestricted model 
+
+. 
+. reg lwage educ exper tenure age married black sibs brthord meduc feduc
+
+      Source |       SS           df       MS      Number of obs   =       663
+-------------+----------------------------------   F(10, 652)      =     17.86
+       Model |  24.1880684        10  2.41880684   Prob > F        =    0.0000
+    Residual |   88.295094       652  .135421923   R-squared       =    0.2150
+-------------+----------------------------------   Adj R-squared   =    0.2030
+       Total |  112.483162       662  .169914143   Root MSE        =      .368
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0579615   .0083166     6.97   0.000     .0416309    .0742921
+       exper |   .0133595   .0046294     2.89   0.004     .0042691    .0224498
+      tenure |   .0080938   .0030144     2.69   0.007     .0021748    .0140128
+         age |   .0100142   .0057104     1.75   0.080    -.0011987    .0212271
+     married |   .1908066   .0481511     3.96   0.000     .0962566    .2853566
+       black |  -.1263737   .0552376    -2.29   0.022    -.2348387   -.0179087
+        sibs |    .005396   .0081525     0.66   0.508    -.0106123    .0214043
+     brthord |  -.0169547   .0120085    -1.41   0.158    -.0405348    .0066253
+       meduc |    .011112   .0064424     1.72   0.085    -.0015383    .0237622
+       feduc |   .0105945   .0056177     1.89   0.060    -.0004363    .0216254
+       _cons |   5.111291   .1920792    26.61   0.000     4.734122    5.488459
+------------------------------------------------------------------------------
+
+. 
+. 
+. 
+. local ssr_ur = `e(rss)'
+
+. 
+. local df_ur = `e(df_r)'
+
+. 
+. 
+. 
+. * are the fmaily controls important? 
+
+. 
+. *** restricted model - omit sibs brthord meduc feduc
+
+. 
+. reg lwage educ exper tenure age married black
+
+      Source |       SS           df       MS      Number of obs   =       935
+-------------+----------------------------------   F(6, 928)       =     39.04
+       Model |   33.384817         6  5.56413617   Prob > F        =    0.0000
+    Residual |  132.271466       928  .142533908   R-squared       =    0.2015
+-------------+----------------------------------   Adj R-squared   =    0.1964
+       Total |  165.656283       934  .177362188   Root MSE        =    .37754
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0671578   .0066659    10.07   0.000     .0540758    .0802399
+       exper |    .011163   .0038347     2.91   0.004     .0036372    .0186887
+      tenure |   .0111277   .0025618     4.34   0.000     .0061001    .0161552
+         age |   .0071063   .0048328     1.47   0.142    -.0023782    .0165908
+     married |   .1831405   .0403755     4.54   0.000     .1039025    .2623784
+       black |  -.1964922   .0377325    -5.21   0.000     -.270543   -.1224413
+       _cons |   5.291493   .1581588    33.46   0.000     4.981103    5.601884
+------------------------------------------------------------------------------
+
+. 
+. 
+. 
+. local ssr_r = `e(rss)'
+
+. 
+. local df_r = `e(df_r)'
+
+. 
+. 
+. 
+. local q = `df_r'-`df_ur'
+
+. di "`q'"
+276
+
+. mdesc
+
+    Variable    |     Missing          Total     Percent Missing
+----------------+-----------------------------------------------
+           wage |           0            935           0.00
+          hours |           0            935           0.00
+             IQ |           0            935           0.00
+            KWW |           0            935           0.00
+           educ |           0            935           0.00
+          exper |           0            935           0.00
+         tenure |           0            935           0.00
+            age |           0            935           0.00
+        married |           0            935           0.00
+          black |           0            935           0.00
+          south |           0            935           0.00
+          urban |           0            935           0.00
+           sibs |           0            935           0.00
+        brthord |          83            935           8.88
+          meduc |          78            935           8.34
+          feduc |         194            935          20.75
+          lwage |           0            935           0.00
+----------------+-----------------------------------------------
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_00000c.tmp"
+
+. 
+. * EXAMPLE 2
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clea
+> r 
+
+. 
+. * there are some missing values - need to ensure the same sample between regressions
+. foreach var in lwage educ exper tenure age married black sibs brthord meduc feduc {
+  2.         qui drop if missing(`var')
+  3. }
+
+. 
+. *** MANUAL CALCULATION
+. 
+. * unrestricted model 
+. reg lwage educ exper tenure age married black sibs brthord meduc feduc
+
+      Source |       SS           df       MS      Number of obs   =       663
+-------------+----------------------------------   F(10, 652)      =     17.86
+       Model |  24.1880684        10  2.41880684   Prob > F        =    0.0000
+    Residual |   88.295094       652  .135421923   R-squared       =    0.2150
+-------------+----------------------------------   Adj R-squared   =    0.2030
+       Total |  112.483162       662  .169914143   Root MSE        =      .368
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0579615   .0083166     6.97   0.000     .0416309    .0742921
+       exper |   .0133595   .0046294     2.89   0.004     .0042691    .0224498
+      tenure |   .0080938   .0030144     2.69   0.007     .0021748    .0140128
+         age |   .0100142   .0057104     1.75   0.080    -.0011987    .0212271
+     married |   .1908066   .0481511     3.96   0.000     .0962566    .2853566
+       black |  -.1263737   .0552376    -2.29   0.022    -.2348387   -.0179087
+        sibs |    .005396   .0081525     0.66   0.508    -.0106123    .0214043
+     brthord |  -.0169547   .0120085    -1.41   0.158    -.0405348    .0066253
+       meduc |    .011112   .0064424     1.72   0.085    -.0015383    .0237622
+       feduc |   .0105945   .0056177     1.89   0.060    -.0004363    .0216254
+       _cons |   5.111291   .1920792    26.61   0.000     4.734122    5.488459
+------------------------------------------------------------------------------
+
+. 
+. local ssr_ur = `e(rss)'
+
+. local df_ur = `e(df_r)'
+
+. 
+. * are the fmaily controls important? 
+. *** restricted model - omit sibs brthord meduc feduc
+. reg lwage educ exper tenure age married black
+
+      Source |       SS           df       MS      Number of obs   =       663
+-------------+----------------------------------   F(6, 656)       =     26.41
+       Model |  21.8849353         6  3.64748922   Prob > F        =    0.0000
+    Residual |   90.598227       656  .138107053   R-squared       =    0.1946
+-------------+----------------------------------   Adj R-squared   =    0.1872
+       Total |  112.483162       662  .169914143   Root MSE        =    .37163
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |    .069872   .0077407     9.03   0.000     .0546725    .0850716
+       exper |    .012969   .0046601     2.78   0.006     .0038184    .0221196
+      tenure |   .0081785   .0030422     2.69   0.007     .0022049     .014152
+         age |   .0091414   .0057514     1.59   0.112     -.002152    .0204349
+     married |   .1909073   .0485965     3.93   0.000     .0954838    .2863308
+       black |  -.1604038   .0533542    -3.01   0.003    -.2651695   -.0556381
+       _cons |   5.191248    .183093    28.35   0.000     4.831729    5.550767
+------------------------------------------------------------------------------
+
+. 
+. local ssr_r = `e(rss)'
+
+. local df_r = `e(df_r)'
+
+. 
+. local q = `df_r'-`df_ur'
+
+. 
+. local f = ((`ssr_r' - `ssr_ur')/`q')/(`ssr_ur'/`df_ur')
+
+. local p = (1-F(`q',`df_ur',`f'))
+
+. 
+. di "F-statistic: `f'"
+F-statistic: 4.251772863515703
+
+. di "p-value: `p'"
+p-value: .0020998776362412
+
+. 
+. *** USING STATA BUILT-IN FUNCTION: test 
+. reg lwage educ exper tenure age married black sibs brthord meduc feduc
+
+      Source |       SS           df       MS      Number of obs   =       663
+-------------+----------------------------------   F(10, 652)      =     17.86
+       Model |  24.1880684        10  2.41880684   Prob > F        =    0.0000
+    Residual |   88.295094       652  .135421923   R-squared       =    0.2150
+-------------+----------------------------------   Adj R-squared   =    0.2030
+       Total |  112.483162       662  .169914143   Root MSE        =      .368
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0579615   .0083166     6.97   0.000     .0416309    .0742921
+       exper |   .0133595   .0046294     2.89   0.004     .0042691    .0224498
+      tenure |   .0080938   .0030144     2.69   0.007     .0021748    .0140128
+         age |   .0100142   .0057104     1.75   0.080    -.0011987    .0212271
+     married |   .1908066   .0481511     3.96   0.000     .0962566    .2853566
+       black |  -.1263737   .0552376    -2.29   0.022    -.2348387   -.0179087
+        sibs |    .005396   .0081525     0.66   0.508    -.0106123    .0214043
+     brthord |  -.0169547   .0120085    -1.41   0.158    -.0405348    .0066253
+       meduc |    .011112   .0064424     1.72   0.085    -.0015383    .0237622
+       feduc |   .0105945   .0056177     1.89   0.060    -.0004363    .0216254
+       _cons |   5.111291   .1920792    26.61   0.000     4.734122    5.488459
+------------------------------------------------------------------------------
+
+. test sibs brthord meduc feduc
+
+ ( 1)  sibs = 0
+ ( 2)  brthord = 0
+ ( 3)  meduc = 0
+ ( 4)  feduc = 0
+
+       F(  4,   652) =    4.25
+            Prob > F =    0.0021
+
+. di "p-value: `r(p)'"
+p-value: .002099877636241
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_00000d.tmp"
+
+. 
+. * EXAMPLE 2
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clea
+> r 
+
+. 
+. * there are some missing values - need to ensure the same sample between regressions
+. foreach var in lwage educ exper tenure age married black sibs brthord meduc {
+  2.         qui drop if missing(`var')
+  3. }
+
+. 
+. *** MANUAL CALCULATION
+. 
+. * unrestricted model 
+. reg lwage educ exper tenure age married black sibs brthord meduc
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(9, 774)       =     23.95
+       Model |  28.7999837         9  3.19999819   Prob > F        =    0.0000
+    Residual |  103.411004       774  .133605948   R-squared       =    0.2178
+-------------+----------------------------------   Adj R-squared   =    0.2087
+       Total |  132.210988       783  .168851836   Root MSE        =    .36552
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0632843   .0075177     8.42   0.000     .0485268    .0780418
+       exper |   .0128315   .0042028     3.05   0.002     .0045812    .0210818
+      tenure |   .0084032   .0027386     3.07   0.002     .0030273     .013779
+         age |   .0097452   .0051718     1.88   0.060    -.0004072    .0198976
+     married |   .1793571   .0447556     4.01   0.000     .0915003    .2672139
+       black |  -.1656511   .0449557    -3.68   0.000    -.2539007   -.0774016
+        sibs |   .0007716   .0075735     0.10   0.919    -.0140955    .0156387
+     brthord |  -.0074501   .0105637    -0.71   0.481     -.028187    .0132868
+       meduc |   .0161923   .0051095     3.17   0.002     .0061621    .0262226
+       _cons |   5.114045   .1767237    28.94   0.000      4.76713    5.460959
+------------------------------------------------------------------------------
+
+. 
+. local ssr_ur = `e(rss)'
+
+. local df_ur = `e(df_r)'
+
+. 
+. * are the fmaily controls important? 
+. *** restricted model - omit sibs brthord meduc feduc
+. reg lwage educ exper tenure age married black
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(6, 777)       =     33.48
+       Model |  27.1566388         6  4.52610646   Prob > F        =    0.0000
+    Residual |  105.054349       777  .135205082   R-squared       =    0.2054
+-------------+----------------------------------   Adj R-squared   =    0.1993
+       Total |  132.210988       783  .168851836   Root MSE        =     .3677
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0712039   .0071579     9.95   0.000     .0571527    .0852551
+       exper |   .0129081   .0042207     3.06   0.002     .0046227    .0211935
+      tenure |   .0084567   .0027532     3.07   0.002     .0030521    .0138614
+         age |   .0092705   .0052008     1.78   0.075    -.0009387    .0194797
+     married |   .1799445   .0449886     4.00   0.000      .091631     .268258
+       black |  -.1902623   .0435019    -4.37   0.000    -.2756575   -.1048672
+       _cons |   5.181659   .1686995    30.72   0.000     4.850498    5.512819
+------------------------------------------------------------------------------
+
+. 
+. local ssr_r = `e(rss)'
+
+. local df_r = `e(df_r)'
+
+. 
+. local q = `df_r'-`df_ur'
+
+. 
+. local f = ((`ssr_r' - `ssr_ur')/`q')/(`ssr_ur'/`df_ur')
+
+. local p = (1-F(`q',`df_ur',`f'))
+
+. 
+. di "F-statistic: `f'"
+F-statistic: 4.099979395012739
+
+. di "p-value: `p'"
+p-value: .0066939250185409
+
+. 
+. *** USING STATA BUILT-IN FUNCTION: test 
+. reg lwage educ exper tenure age married black sibs brthord meduc
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(9, 774)       =     23.95
+       Model |  28.7999837         9  3.19999819   Prob > F        =    0.0000
+    Residual |  103.411004       774  .133605948   R-squared       =    0.2178
+-------------+----------------------------------   Adj R-squared   =    0.2087
+       Total |  132.210988       783  .168851836   Root MSE        =    .36552
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0632843   .0075177     8.42   0.000     .0485268    .0780418
+       exper |   .0128315   .0042028     3.05   0.002     .0045812    .0210818
+      tenure |   .0084032   .0027386     3.07   0.002     .0030273     .013779
+         age |   .0097452   .0051718     1.88   0.060    -.0004072    .0198976
+     married |   .1793571   .0447556     4.01   0.000     .0915003    .2672139
+       black |  -.1656511   .0449557    -3.68   0.000    -.2539007   -.0774016
+        sibs |   .0007716   .0075735     0.10   0.919    -.0140955    .0156387
+     brthord |  -.0074501   .0105637    -0.71   0.481     -.028187    .0132868
+       meduc |   .0161923   .0051095     3.17   0.002     .0061621    .0262226
+       _cons |   5.114045   .1767237    28.94   0.000      4.76713    5.460959
+------------------------------------------------------------------------------
+
+. test sibs brthord meduc feduc
+feduc not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_00000e.tmp"
+
+. 
+. * EXAMPLE 2
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clea
+> r 
+
+. 
+. * there are some missing values - need to ensure the same sample between regressions
+. foreach var in lwage educ exper tenure age married black sibs brthord meduc {
+  2.         qui drop if missing(`var')
+  3. }
+
+. 
+. *** MANUAL CALCULATION
+. 
+. * unrestricted model 
+. reg lwage educ exper tenure age married black sibs brthord meduc
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(9, 774)       =     23.95
+       Model |  28.7999837         9  3.19999819   Prob > F        =    0.0000
+    Residual |  103.411004       774  .133605948   R-squared       =    0.2178
+-------------+----------------------------------   Adj R-squared   =    0.2087
+       Total |  132.210988       783  .168851836   Root MSE        =    .36552
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0632843   .0075177     8.42   0.000     .0485268    .0780418
+       exper |   .0128315   .0042028     3.05   0.002     .0045812    .0210818
+      tenure |   .0084032   .0027386     3.07   0.002     .0030273     .013779
+         age |   .0097452   .0051718     1.88   0.060    -.0004072    .0198976
+     married |   .1793571   .0447556     4.01   0.000     .0915003    .2672139
+       black |  -.1656511   .0449557    -3.68   0.000    -.2539007   -.0774016
+        sibs |   .0007716   .0075735     0.10   0.919    -.0140955    .0156387
+     brthord |  -.0074501   .0105637    -0.71   0.481     -.028187    .0132868
+       meduc |   .0161923   .0051095     3.17   0.002     .0061621    .0262226
+       _cons |   5.114045   .1767237    28.94   0.000      4.76713    5.460959
+------------------------------------------------------------------------------
+
+. 
+. local ssr_ur = `e(rss)'
+
+. local df_ur = `e(df_r)'
+
+. 
+. * are the fmaily controls important? 
+. *** restricted model - omit sibs brthord meduc feduc
+. reg lwage educ exper tenure age married black
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(6, 777)       =     33.48
+       Model |  27.1566388         6  4.52610646   Prob > F        =    0.0000
+    Residual |  105.054349       777  .135205082   R-squared       =    0.2054
+-------------+----------------------------------   Adj R-squared   =    0.1993
+       Total |  132.210988       783  .168851836   Root MSE        =     .3677
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0712039   .0071579     9.95   0.000     .0571527    .0852551
+       exper |   .0129081   .0042207     3.06   0.002     .0046227    .0211935
+      tenure |   .0084567   .0027532     3.07   0.002     .0030521    .0138614
+         age |   .0092705   .0052008     1.78   0.075    -.0009387    .0194797
+     married |   .1799445   .0449886     4.00   0.000      .091631     .268258
+       black |  -.1902623   .0435019    -4.37   0.000    -.2756575   -.1048672
+       _cons |   5.181659   .1686995    30.72   0.000     4.850498    5.512819
+------------------------------------------------------------------------------
+
+. 
+. local ssr_r = `e(rss)'
+
+. local df_r = `e(df_r)'
+
+. 
+. local q = `df_r'-`df_ur'
+
+. 
+. local f = ((`ssr_r' - `ssr_ur')/`q')/(`ssr_ur'/`df_ur')
+
+. local p = (1-F(`q',`df_ur',`f'))
+
+. 
+. di "F-statistic: `f'"
+F-statistic: 4.099979395012739
+
+. di "p-value: `p'"
+p-value: .0066939250185409
+
+. 
+. *** USING STATA BUILT-IN FUNCTION: test 
+. reg lwage educ exper tenure age married black sibs brthord meduc
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(9, 774)       =     23.95
+       Model |  28.7999837         9  3.19999819   Prob > F        =    0.0000
+    Residual |  103.411004       774  .133605948   R-squared       =    0.2178
+-------------+----------------------------------   Adj R-squared   =    0.2087
+       Total |  132.210988       783  .168851836   Root MSE        =    .36552
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0632843   .0075177     8.42   0.000     .0485268    .0780418
+       exper |   .0128315   .0042028     3.05   0.002     .0045812    .0210818
+      tenure |   .0084032   .0027386     3.07   0.002     .0030273     .013779
+         age |   .0097452   .0051718     1.88   0.060    -.0004072    .0198976
+     married |   .1793571   .0447556     4.01   0.000     .0915003    .2672139
+       black |  -.1656511   .0449557    -3.68   0.000    -.2539007   -.0774016
+        sibs |   .0007716   .0075735     0.10   0.919    -.0140955    .0156387
+     brthord |  -.0074501   .0105637    -0.71   0.481     -.028187    .0132868
+       meduc |   .0161923   .0051095     3.17   0.002     .0061621    .0262226
+       _cons |   5.114045   .1767237    28.94   0.000      4.76713    5.460959
+------------------------------------------------------------------------------
+
+. test sibs brthord meduc
+
+ ( 1)  sibs = 0
+ ( 2)  brthord = 0
+ ( 3)  meduc = 0
+
+       F(  3,   774) =    4.10
+            Prob > F =    0.0067
+
+. di "p-value: `r(p)'"
+p-value: .0066939250185413
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_00000f.tmp"
+
+. 
+. * EXAMPLE 2
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clea
+> r 
+
+. 
+. * there are some missing values - need to ensure the same sample between regressions
+. foreach var in lwage educ IQ exper tenure age married black sibs brthord meduc {
+  2.         qui drop if missing(`var')
+  3. }
+
+. 
+. *** MANUAL CALCULATION
+. 
+. * unrestricted model 
+. reg lwage educ IQ exper tenure age married black sibs brthord meduc
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(10, 773)      =     23.16
+       Model |  30.4818796        10  3.04818796   Prob > F        =    0.0000
+    Residual |  101.729108       773  .131602986   R-squared       =    0.2306
+-------------+----------------------------------   Adj R-squared   =    0.2206
+       Total |  132.210988       783  .168851836   Root MSE        =    .36277
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |    .050834   .0082339     6.17   0.000     .0346704    .0669975
+          IQ |   .0039349   .0011007     3.57   0.000     .0017742    .0060956
+       exper |   .0121506   .0041756     2.91   0.004     .0039539    .0203474
+      tenure |   .0080077   .0027202     2.94   0.003     .0026678    .0133476
+         age |   .0115461   .0051575     2.24   0.025     .0014217    .0216705
+     married |   .1811727   .0444218     4.08   0.000      .093971    .2683743
+       black |  -.1182276   .0465477    -2.54   0.011    -.2096025   -.0268526
+        sibs |   .0019555   .0075238     0.26   0.795    -.0128141    .0167251
+     brthord |  -.0072435   .0104844    -0.69   0.490    -.0278247    .0133377
+       meduc |   .0142696   .0050995     2.80   0.005      .004259    .0242802
+       _cons |   4.842185   .1911704    25.33   0.000      4.46691     5.21746
+------------------------------------------------------------------------------
+
+. 
+. local ssr_ur = `e(rss)'
+
+. local df_ur = `e(df_r)'
+
+. 
+. * are the fmaily controls important? 
+. *** restricted model - omit sibs brthord meduc feduc
+. reg lwage educ IQ exper tenure age married black
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(7, 776)       =     31.47
+       Model |  29.2360953         7  4.17658504   Prob > F        =    0.0000
+    Residual |  102.974892       776  .132699604   R-squared       =    0.2211
+-------------+----------------------------------   Adj R-squared   =    0.2141
+       Total |  132.210988       783  .168851836   Root MSE        =    .36428
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0562261   .0080376     7.00   0.000     .0404481    .0720041
+          IQ |   .0043376   .0010957     3.96   0.000     .0021866    .0064885
+       exper |   .0121018   .0041864     2.89   0.004     .0038838    .0203198
+      tenure |   .0079956   .0027301     2.93   0.004     .0026364    .0133549
+         age |   .0113269   .0051785     2.19   0.029     .0011614    .0214924
+     married |   .1820988   .0445731     4.09   0.000     .0946007    .2695969
+       black |   -.132717   .0454826    -2.92   0.004    -.2220005   -.0434335
+       _cons |   4.878347   .1838558    26.53   0.000     4.517433    5.239261
+------------------------------------------------------------------------------
+
+. 
+. local ssr_r = `e(rss)'
+
+. local df_r = `e(df_r)'
+
+. 
+. local q = `df_r'-`df_ur'
+
+. 
+. local f = ((`ssr_r' - `ssr_ur')/`q')/(`ssr_ur'/`df_ur')
+
+. local p = (1-F(`q',`df_ur',`f'))
+
+. 
+. di "F-statistic: `f'"
+F-statistic: 3.155410432037309
+
+. di "p-value: `p'"
+p-value: .0242550750388884
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_00000g.tmp"
+
+. 
+. * EXAMPLE 2
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clea
+> r 
+
+. 
+. * there are some missing values - need to ensure the same sample between regressions
+. foreach var in lwage educ IQ exper tenure age married black sibs brthord meduc {
+  2.         qui drop if missing(`var')
+  3. }
+
+. 
+. *** MANUAL CALCULATION
+. 
+. * unrestricted model 
+. reg lwage educ IQ exper tenure age married black sibs brthord meduc
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(10, 773)      =     23.16
+       Model |  30.4818796        10  3.04818796   Prob > F        =    0.0000
+    Residual |  101.729108       773  .131602986   R-squared       =    0.2306
+-------------+----------------------------------   Adj R-squared   =    0.2206
+       Total |  132.210988       783  .168851836   Root MSE        =    .36277
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |    .050834   .0082339     6.17   0.000     .0346704    .0669975
+          IQ |   .0039349   .0011007     3.57   0.000     .0017742    .0060956
+       exper |   .0121506   .0041756     2.91   0.004     .0039539    .0203474
+      tenure |   .0080077   .0027202     2.94   0.003     .0026678    .0133476
+         age |   .0115461   .0051575     2.24   0.025     .0014217    .0216705
+     married |   .1811727   .0444218     4.08   0.000      .093971    .2683743
+       black |  -.1182276   .0465477    -2.54   0.011    -.2096025   -.0268526
+        sibs |   .0019555   .0075238     0.26   0.795    -.0128141    .0167251
+     brthord |  -.0072435   .0104844    -0.69   0.490    -.0278247    .0133377
+       meduc |   .0142696   .0050995     2.80   0.005      .004259    .0242802
+       _cons |   4.842185   .1911704    25.33   0.000      4.46691     5.21746
+------------------------------------------------------------------------------
+
+. 
+. local ssr_ur = `e(rss)'
+
+. local df_ur = `e(df_r)'
+
+. 
+. * are the fmaily controls important? 
+. *** restricted model - omit sibs brthord meduc feduc
+. reg lwage educ IQ exper tenure age married black
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(7, 776)       =     31.47
+       Model |  29.2360953         7  4.17658504   Prob > F        =    0.0000
+    Residual |  102.974892       776  .132699604   R-squared       =    0.2211
+-------------+----------------------------------   Adj R-squared   =    0.2141
+       Total |  132.210988       783  .168851836   Root MSE        =    .36428
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0562261   .0080376     7.00   0.000     .0404481    .0720041
+          IQ |   .0043376   .0010957     3.96   0.000     .0021866    .0064885
+       exper |   .0121018   .0041864     2.89   0.004     .0038838    .0203198
+      tenure |   .0079956   .0027301     2.93   0.004     .0026364    .0133549
+         age |   .0113269   .0051785     2.19   0.029     .0011614    .0214924
+     married |   .1820988   .0445731     4.09   0.000     .0946007    .2695969
+       black |   -.132717   .0454826    -2.92   0.004    -.2220005   -.0434335
+       _cons |   4.878347   .1838558    26.53   0.000     4.517433    5.239261
+------------------------------------------------------------------------------
+
+. 
+. local ssr_r = `e(rss)'
+
+. local df_r = `e(df_r)'
+
+. 
+. local q = `df_r'-`df_ur'
+
+. 
+. local f = ((`ssr_r' - `ssr_ur')/`q')/(`ssr_ur'/`df_ur')
+
+. local p = (1-F(`q',`df_ur',`f'))
+
+. 
+. di "F-statistic: `f'"
+F-statistic: 3.155410432037309
+
+. di "p-value: `p'"
+p-value: .0242550750388884
+
+. 
+. *** USING STATA BUILT-IN FUNCTION: test 
+. reg lwage educ IQ exper tenure age married black sibs brthord meduc
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(10, 773)      =     23.16
+       Model |  30.4818796        10  3.04818796   Prob > F        =    0.0000
+    Residual |  101.729108       773  .131602986   R-squared       =    0.2306
+-------------+----------------------------------   Adj R-squared   =    0.2206
+       Total |  132.210988       783  .168851836   Root MSE        =    .36277
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |    .050834   .0082339     6.17   0.000     .0346704    .0669975
+          IQ |   .0039349   .0011007     3.57   0.000     .0017742    .0060956
+       exper |   .0121506   .0041756     2.91   0.004     .0039539    .0203474
+      tenure |   .0080077   .0027202     2.94   0.003     .0026678    .0133476
+         age |   .0115461   .0051575     2.24   0.025     .0014217    .0216705
+     married |   .1811727   .0444218     4.08   0.000      .093971    .2683743
+       black |  -.1182276   .0465477    -2.54   0.011    -.2096025   -.0268526
+        sibs |   .0019555   .0075238     0.26   0.795    -.0128141    .0167251
+     brthord |  -.0072435   .0104844    -0.69   0.490    -.0278247    .0133377
+       meduc |   .0142696   .0050995     2.80   0.005      .004259    .0242802
+       _cons |   4.842185   .1911704    25.33   0.000      4.46691     5.21746
+------------------------------------------------------------------------------
+
+. test sibs brthord meduc
+
+ ( 1)  sibs = 0
+ ( 2)  brthord = 0
+ ( 3)  meduc = 0
+
+       F(  3,   773) =    3.16
+            Prob > F =    0.0243
+
+. di "p-value: `r(p)'"
+p-value: .0242550750388925
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_00000h.tmp"
+
+. 
+. * EXAMPLE 2
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clea
+> r 
+
+. 
+. * there are some missing values - need to ensure the same sample between regressions
+. foreach var in lwage educ IQ exper tenure age married black sibs brthord meduc feduc {
+  2.         qui drop if missing(`var')
+  3. }
+
+. 
+. *** MANUAL CALCULATION
+. 
+. * unrestricted model 
+. reg lwage educ IQ exper tenure age married black sibs brthord meduc feduc
+
+      Source |       SS           df       MS      Number of obs   =       663
+-------------+----------------------------------   F(11, 651)      =     17.46
+       Model |  25.6268849        11  2.32971681   Prob > F        =    0.0000
+    Residual |  86.8562775       651  .133419781   R-squared       =    0.2278
+-------------+----------------------------------   Adj R-squared   =    0.2148
+       Total |  112.483162       662  .169914143   Root MSE        =    .36527
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0448945   .0091639     4.90   0.000     .0269001    .0628888
+          IQ |    .004035   .0012287     3.28   0.001     .0016223    .0064477
+       exper |   .0125525   .0046016     2.73   0.007     .0035167    .0215883
+      tenure |   .0077317    .002994     2.58   0.010     .0018526    .0136108
+         age |   .0119967      .0057     2.10   0.036      .000804    .0231894
+     married |   .1892947   .0477961     3.96   0.000     .0954416    .2831477
+       black |   -.078178    .056758    -1.38   0.169    -.1896288    .0332728
+        sibs |   .0066701   .0081013     0.82   0.411    -.0092377    .0225779
+     brthord |  -.0154112   .0119287    -1.29   0.197    -.0388345    .0080121
+       meduc |   .0098313   .0064064     1.53   0.125    -.0027485     .022411
+       feduc |   .0097681   .0055816     1.75   0.081    -.0011921    .0207283
+       _cons |   4.835763    .208299    23.22   0.000     4.426744    5.244782
+------------------------------------------------------------------------------
+
+. 
+. local ssr_ur = `e(rss)'
+
+. local df_ur = `e(df_r)'
+
+. 
+. * are the fmaily controls important? 
+. *** restricted model - omit sibs brthord meduc feduc
+. reg lwage educ IQ exper tenure age married black
+
+      Source |       SS           df       MS      Number of obs   =       663
+-------------+----------------------------------   F(7, 655)       =     25.12
+       Model |  23.8071979         7  3.40102826   Prob > F        =    0.0000
+    Residual |  88.6759645       655  .135383152   R-squared       =    0.2117
+-------------+----------------------------------   Adj R-squared   =    0.2032
+       Total |  112.483162       662  .169914143   Root MSE        =    .36794
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0532452   .0088435     6.02   0.000     .0358802    .0706102
+          IQ |   .0046076   .0012228     3.77   0.000     .0022065    .0070086
+       exper |   .0119887   .0046213     2.59   0.010     .0029143     .021063
+      tenure |   .0077327   .0030143     2.57   0.011     .0018137    .0136516
+         age |   .0115141   .0057291     2.01   0.045     .0002644    .0227637
+     married |   .1893777   .0481166     3.94   0.000     .0948963    .2838591
+       black |  -.0975317   .0553979    -1.76   0.079    -.2063106    .0112472
+       _cons |   4.878908   .1993305    24.48   0.000     4.487504    5.270312
+------------------------------------------------------------------------------
+
+. 
+. local ssr_r = `e(rss)'
+
+. local df_r = `e(df_r)'
+
+. 
+. local q = `df_r'-`df_ur'
+
+. 
+. local f = ((`ssr_r' - `ssr_ur')/`q')/(`ssr_ur'/`df_ur')
+
+. local p = (1-F(`q',`df_ur',`f'))
+
+. 
+. di "F-statistic: `f'"
+F-statistic: 3.409702427460488
+
+. di "p-value: `p'"
+p-value: .0090011587057685
+
+. 
+. *** USING STATA BUILT-IN FUNCTION: test 
+. reg lwage educ IQ exper tenure age married black sibs brthord meduc feduc
+
+      Source |       SS           df       MS      Number of obs   =       663
+-------------+----------------------------------   F(11, 651)      =     17.46
+       Model |  25.6268849        11  2.32971681   Prob > F        =    0.0000
+    Residual |  86.8562775       651  .133419781   R-squared       =    0.2278
+-------------+----------------------------------   Adj R-squared   =    0.2148
+       Total |  112.483162       662  .169914143   Root MSE        =    .36527
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0448945   .0091639     4.90   0.000     .0269001    .0628888
+          IQ |    .004035   .0012287     3.28   0.001     .0016223    .0064477
+       exper |   .0125525   .0046016     2.73   0.007     .0035167    .0215883
+      tenure |   .0077317    .002994     2.58   0.010     .0018526    .0136108
+         age |   .0119967      .0057     2.10   0.036      .000804    .0231894
+     married |   .1892947   .0477961     3.96   0.000     .0954416    .2831477
+       black |   -.078178    .056758    -1.38   0.169    -.1896288    .0332728
+        sibs |   .0066701   .0081013     0.82   0.411    -.0092377    .0225779
+     brthord |  -.0154112   .0119287    -1.29   0.197    -.0388345    .0080121
+       meduc |   .0098313   .0064064     1.53   0.125    -.0027485     .022411
+       feduc |   .0097681   .0055816     1.75   0.081    -.0011921    .0207283
+       _cons |   4.835763    .208299    23.22   0.000     4.426744    5.244782
+------------------------------------------------------------------------------
+
+. test sibs brthord meduc feduc
+
+ ( 1)  sibs = 0
+ ( 2)  brthord = 0
+ ( 3)  meduc = 0
+ ( 4)  feduc = 0
+
+       F(  4,   651) =    3.41
+            Prob > F =    0.0090
+
+. di "p-value: `r(p)'"
+p-value: .0090011587057677
+
+. 
+end of do-file
+
+. do "C:\Users\MICHAE~1.BAK\AppData\Local\Temp\STD6fd4_00000i.tmp"
+
+. 
+. * EXAMPLE 2
+. use "https://raw.githubusercontent.com/baker-michael/ss368-fall2025/main/dta/jw_datasets/WAGE2.DTA", clea
+> r 
+
+. 
+. * there are some missing values - need to ensure the same sample between regressions
+. foreach var in lwage educ IQ exper tenure age married black sibs brthord meduc {
+  2.         qui drop if missing(`var')
+  3. }
+
+. 
+. *** MANUAL CALCULATION
+. 
+. * unrestricted model 
+. reg lwage educ IQ exper tenure age married black sibs brthord meduc
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(10, 773)      =     23.16
+       Model |  30.4818796        10  3.04818796   Prob > F        =    0.0000
+    Residual |  101.729108       773  .131602986   R-squared       =    0.2306
+-------------+----------------------------------   Adj R-squared   =    0.2206
+       Total |  132.210988       783  .168851836   Root MSE        =    .36277
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |    .050834   .0082339     6.17   0.000     .0346704    .0669975
+          IQ |   .0039349   .0011007     3.57   0.000     .0017742    .0060956
+       exper |   .0121506   .0041756     2.91   0.004     .0039539    .0203474
+      tenure |   .0080077   .0027202     2.94   0.003     .0026678    .0133476
+         age |   .0115461   .0051575     2.24   0.025     .0014217    .0216705
+     married |   .1811727   .0444218     4.08   0.000      .093971    .2683743
+       black |  -.1182276   .0465477    -2.54   0.011    -.2096025   -.0268526
+        sibs |   .0019555   .0075238     0.26   0.795    -.0128141    .0167251
+     brthord |  -.0072435   .0104844    -0.69   0.490    -.0278247    .0133377
+       meduc |   .0142696   .0050995     2.80   0.005      .004259    .0242802
+       _cons |   4.842185   .1911704    25.33   0.000      4.46691     5.21746
+------------------------------------------------------------------------------
+
+. 
+. local ssr_ur = `e(rss)'
+
+. local df_ur = `e(df_r)'
+
+. 
+. * are the fmaily controls important? 
+. *** restricted model - omit sibs brthord meduc
+. reg lwage educ IQ exper tenure age married black
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(7, 776)       =     31.47
+       Model |  29.2360953         7  4.17658504   Prob > F        =    0.0000
+    Residual |  102.974892       776  .132699604   R-squared       =    0.2211
+-------------+----------------------------------   Adj R-squared   =    0.2141
+       Total |  132.210988       783  .168851836   Root MSE        =    .36428
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0562261   .0080376     7.00   0.000     .0404481    .0720041
+          IQ |   .0043376   .0010957     3.96   0.000     .0021866    .0064885
+       exper |   .0121018   .0041864     2.89   0.004     .0038838    .0203198
+      tenure |   .0079956   .0027301     2.93   0.004     .0026364    .0133549
+         age |   .0113269   .0051785     2.19   0.029     .0011614    .0214924
+     married |   .1820988   .0445731     4.09   0.000     .0946007    .2695969
+       black |   -.132717   .0454826    -2.92   0.004    -.2220005   -.0434335
+       _cons |   4.878347   .1838558    26.53   0.000     4.517433    5.239261
+------------------------------------------------------------------------------
+
+. 
+. local ssr_r = `e(rss)'
+
+. local df_r = `e(df_r)'
+
+. 
+. local q = `df_r'-`df_ur'
+
+. 
+. local f = ((`ssr_r' - `ssr_ur')/`q')/(`ssr_ur'/`df_ur')
+
+. local p = (1-F(`q',`df_ur',`f'))
+
+. 
+. di "F-statistic: `f'"
+F-statistic: 3.155410432037309
+
+. di "p-value: `p'"
+p-value: .0242550750388884
+
+. 
+. *** USING STATA BUILT-IN FUNCTION: test 
+. reg lwage educ IQ exper tenure age married black sibs brthord meduc
+
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(10, 773)      =     23.16
+       Model |  30.4818796        10  3.04818796   Prob > F        =    0.0000
+    Residual |  101.729108       773  .131602986   R-squared       =    0.2306
+-------------+----------------------------------   Adj R-squared   =    0.2206
+       Total |  132.210988       783  .168851836   Root MSE        =    .36277
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |    .050834   .0082339     6.17   0.000     .0346704    .0669975
+          IQ |   .0039349   .0011007     3.57   0.000     .0017742    .0060956
+       exper |   .0121506   .0041756     2.91   0.004     .0039539    .0203474
+      tenure |   .0080077   .0027202     2.94   0.003     .0026678    .0133476
+         age |   .0115461   .0051575     2.24   0.025     .0014217    .0216705
+     married |   .1811727   .0444218     4.08   0.000      .093971    .2683743
+       black |  -.1182276   .0465477    -2.54   0.011    -.2096025   -.0268526
+        sibs |   .0019555   .0075238     0.26   0.795    -.0128141    .0167251
+     brthord |  -.0072435   .0104844    -0.69   0.490    -.0278247    .0133377
+       meduc |   .0142696   .0050995     2.80   0.005      .004259    .0242802
+       _cons |   4.842185   .1911704    25.33   0.000      4.46691     5.21746
+------------------------------------------------------------------------------
+
+. test sibs brthord meduc
+
+ ( 1)  sibs = 0
+ ( 2)  brthord = 0
+ ( 3)  meduc = 0
+
+       F(  3,   773) =    3.16
+            Prob > F =    0.0243
+
+. di "p-value: `r(p)'"
+p-value: .0242550750388925
+
+. 
+end of do-file
+
